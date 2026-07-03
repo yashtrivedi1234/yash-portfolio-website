@@ -58,7 +58,6 @@ export function createPageMetadata({
       title,
       description,
       images: [image],
-      creator: `@${siteConfig.twitter.split("/").pop()}`,
     },
     other: {
       "application-name": siteConfig.name,
@@ -79,15 +78,16 @@ export function createPersonSchema() {
     sameAs: [
       siteConfig.github,
       siteConfig.linkedin,
-      siteConfig.twitter,
-      siteConfig.instagram,
+      siteConfig.leetcode,
     ],
     knowsAbout: [
-      "Web Development",
+      "Full Stack Development",
+      "MERN Stack",
       "Next.js",
       "React",
       "TypeScript",
-      "Full Stack Development",
+      "AI Integration",
+      "System Design",
     ],
   };
 }

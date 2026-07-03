@@ -132,7 +132,7 @@ export default function HomePage() {
           <SectionHeading
             label="Experience"
             title="Work Experience"
-            description="My professional journey building web applications for companies and clients worldwide."
+            description="My professional journey building production platforms, AI pipelines, and real-time applications across India."
           />
           <ExperienceTimeline items={workExperience} />
           <div className="text-center">
@@ -149,7 +149,7 @@ export default function HomePage() {
           <SectionHeading
             label="Achievements"
             title="By The Numbers"
-            description="Key milestones and accomplishments throughout my development career."
+            description="Key milestones from shipping 15+ production platforms, leading engineering teams, and building AI pipelines."
           />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {siteConfig.stats.map((stat) => (
@@ -172,8 +172,8 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             label="Testimonials"
-            title="What Clients Say"
-            description="Feedback from clients and colleagues I've had the pleasure of working with."
+            title="Work Highlights"
+            description="Impact across companies I've worked with — from production platforms to AI pipelines and team leadership."
           />
           <Testimonials testimonials={testimonials} />
         </div>

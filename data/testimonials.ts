@@ -9,38 +9,38 @@ export interface Testimonial {
 
 export const testimonials: Testimonial[] = [
   {
-    name: "Sarah Chen",
-    role: "CEO",
-    company: "StartupFlow",
+    name: "CodingClave Development LLP",
+    role: "Training & Development",
+    company: "CodingClave",
     content:
-      "Alex delivered an exceptional website that exceeded our expectations. The attention to detail, performance optimization, and SEO implementation helped us increase organic traffic by 150% within three months.",
+      "Architecting production Next.js platforms with TypeScript, PostgreSQL, and Prisma while mentoring students in MERN stack and DSA — delivering 99.9%+ uptime via Cloudflare edge infrastructure.",
     avatar: "/images/avatars/avatar-1.svg",
     rating: 5,
   },
   {
-    name: "Michael Rodriguez",
-    role: "Product Manager",
-    company: "TechVentures",
+    name: "Code Crafter Web Solutions",
+    role: "MERN Stack Development",
+    company: "Code Crafter",
     content:
-      "Working with Alex was a seamless experience. They transformed our outdated platform into a modern, fast web application. Communication was excellent throughout the entire project.",
+      "Delivered 14+ client websites and 1 CRM end-to-end. Built an AI chatbot with Groq LLM and LangChain, and improved page load performance by ~30% through compression and code-splitting.",
     avatar: "/images/avatars/avatar-2.svg",
     rating: 5,
   },
   {
-    name: "Emily Watson",
-    role: "Marketing Director",
-    company: "BrandCraft Agency",
+    name: "ERA Foundation India",
+    role: "Team Leadership",
+    company: "ERA Foundation",
     content:
-      "Alex built our agency portfolio and three client landing pages. Every project was delivered on time with outstanding quality. Highly recommend for any web development needs.",
+      "Led a 6-member engineering team to ship 4 full-stack prototypes. Owned Lucknow Craftsmen end-to-end — from DB modelling and Express APIs to React UI across 3 client briefs.",
     avatar: "/images/avatars/avatar-3.svg",
     rating: 5,
   },
   {
-    name: "David Kim",
-    role: "Founder",
-    company: "DataPulse",
+    name: "Xenovate Tech Solutions",
+    role: "Backend & AI Pipeline",
+    company: "Xenovate",
     content:
-      "The dashboard Alex created for our SaaS product is intuitive and blazing fast. Our users love the new interface, and the codebase is clean and maintainable.",
+      "Built a FastAPI scraper processing 1,000+ posts/day from 150+ sites at 92% accuracy. Architected the full pipeline from scraper through LLM enrichment to a real-time React UI.",
     avatar: "/images/avatars/avatar-4.svg",
     rating: 5,
   },

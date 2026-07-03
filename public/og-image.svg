@@ -13,7 +13,7 @@
   <rect width="1200" height="630" fill="url(#bg)"/>
   <circle cx="200" cy="150" r="300" fill="#7c3aed" opacity="0.15"/>
   <circle cx="1000" cy="500" r="250" fill="#4f46e5" opacity="0.15"/>
-  <text x="600" y="280" text-anchor="middle" font-family="system-ui,sans-serif" font-size="64" font-weight="bold" fill="url(#text)">Alex Morgan</text>
-  <text x="600" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="32" fill="#94a3b8">Full-Stack Developer Portfolio</text>
-  <text x="600" y="420" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" fill="#64748b">Next.js " React " TypeScript</text>
+  <text x="600" y="280" text-anchor="middle" font-family="system-ui,sans-serif" font-size="64" font-weight="bold" fill="url(#text)">Yash Trivedi</text>
+  <text x="600" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="32" fill="#94a3b8">Full-Stack Software Engineer</text>
+  <text x="600" y="420" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" fill="#64748b">MERN " Next.js " TypeScript " AI</text>
 </svg>

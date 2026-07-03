@@ -15,37 +15,37 @@ export const metadata = createPageMetadata({
 const aboutSections = [
   {
     title: "Who I Am",
-    content: `I'm ${siteConfig.name}, a dedicated ${siteConfig.role} based in ${siteConfig.location}. With over 5 years of experience in web development, I've helped dozens of businesses and startups establish a strong online presence through modern, performant web applications.`,
+    content: `I'm ${siteConfig.name}, a ${siteConfig.role} based in ${siteConfig.location}. I've shipped 15+ production web platforms and 1 CRM across MERN and Next.js stacks — from MongoDB schema design to Cloudflare-protected deployment.`,
   },
   {
     title: "What I Do",
     content:
-      "I design and develop custom websites, web applications, and digital products using cutting-edge technologies. From landing pages to complex SaaS platforms, I deliver solutions that are fast, accessible, and optimized for search engines.",
+      "I build full-stack web applications, AI-powered pipelines, and real-time platforms. My work spans e-commerce systems, video calling apps, CRM platforms, and LLM-integrated chatbots — always with a focus on performance, security, and production-grade UX.",
+  },
+  {
+    title: "Key Highlights",
+    content:
+      "Delivered 15+ production platforms in React.js, Next.js, Node.js, and MongoDB. Led a 6-member engineering team at ERA Foundation. Architected AI pipelines via Groq LLM + LangChain processing 1,000+ items/day at 92% accuracy with sub-50ms latency and 99.9% uptime.",
   },
   {
     title: "My Development Approach",
     content:
-      "I believe in clean code, user-centered design, and iterative development. Every project starts with understanding your goals, followed by careful planning, regular communication, and thorough testing before deployment.",
+      "I follow RESTful architecture, JWT/RBAC security patterns, and scalable component design. Every project moves from schema design through API development to optimized frontend delivery — with SSR/ISR where it matters, edge infrastructure via Cloudflare, and CI/CD for reliable deployments.",
   },
   {
     title: "Tools I Use",
     content:
-      "My primary toolkit includes Next.js, React, TypeScript, Node.js, and Tailwind CSS. For deployment, I use Vercel and Netlify. I also work with Figma for design collaboration, Git for version control, and various SEO and performance tools.",
+      "My stack includes Next.js (App Router, Server Actions), React.js, TypeScript, Node.js, Express.js, FastAPI, PostgreSQL with Prisma, MongoDB with Mongoose, Tailwind CSS, and AI tooling like LangChain, Groq LLM, and Gemini API. I deploy on Vercel, Render, and Cloudflare.",
   },
   {
-    title: "Why Work With Me",
+    title: "Mentoring & Leadership",
     content:
-      "I combine technical expertise with a strong focus on business outcomes. Clients choose me for my reliability, clear communication, attention to detail, and commitment to delivering projects on time and within budget.",
-  },
-  {
-    title: "Personal Journey",
-    content:
-      "My journey into web development started during university when I built my first website for a campus club. That experience sparked a passion for creating digital experiences that solve real problems. Since then, I've continuously evolved my skills to stay at the forefront of web technology.",
+      "At CodingClave Development LLP, I mentor B.Tech, BCA, and MCA students in MERN stack and DSA — designing curriculum, reviewing capstone projects, and conducting best-practice code reviews. I previously led a 6-member team at ERA Foundation to ship 4 full-stack prototypes.",
   },
   {
     title: "Professional Goals",
     content:
-      "I'm focused on mastering full-stack development, contributing to open-source projects, and helping businesses leverage modern web technologies. My goal is to become a go-to developer for companies seeking high-quality, scalable web solutions.",
+      "I'm focused on building scalable full-stack systems, deepening AI integration expertise, and contributing to high-impact engineering teams. Currently pursuing B.Tech in Computer Science & Engineering at G.C.R.G Group of Institutions, Lucknow (2023–2027).",
   },
 ];
 

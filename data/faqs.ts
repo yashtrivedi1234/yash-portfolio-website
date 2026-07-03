@@ -5,43 +5,43 @@ export interface FAQ {
 
 export const faqs: FAQ[] = [
   {
-    question: "What services do you offer as a web developer?",
+    question: "What services do you offer as a full-stack developer?",
     answer:
-      "I offer full-stack web development services including website development, frontend development with React and Next.js, landing pages, portfolio websites, business websites, web app UI development, website speed optimization, and SEO implementation.",
+      "I offer full-stack web development including MERN and Next.js applications, AI chatbot integration (Groq LLM, LangChain), real-time platforms (WebRTC, Socket.io), e-commerce systems, CRM development, API design, performance optimization, and Cloudflare edge infrastructure setup.",
   },
   {
     question: "What technologies do you specialize in?",
     answer:
-      "I specialize in Next.js, React, TypeScript, Node.js, Tailwind CSS, and modern JavaScript ecosystems. I also have experience with MongoDB, PostgreSQL, Firebase, and various deployment platforms like Vercel and Netlify.",
+      "I specialize in React.js, Next.js (App Router, SSR/ISR), TypeScript, Node.js, Express.js, MongoDB, PostgreSQL (Prisma ORM), Tailwind CSS, and AI tooling including LangChain, Groq LLM, and Gemini API. I also work with Cloudflare CDN/WAF, Vercel, Render, and CI/CD pipelines.",
   },
   {
-    question: "How long does a typical project take?",
+    question: "Do you have experience with AI integrations?",
     answer:
-      "Project timelines vary based on scope. A landing page typically takes 1-2 weeks, a business website 2-4 weeks, and complex web applications 4-8 weeks. I provide detailed timelines during our initial consultation.",
+      "Yes. I've built AI customer support chatbots with Groq LLM and LangChain, FastAPI scrapers processing 1,000+ items/day at 92% accuracy, and transaction pipelines via Gemini API — all deployed in production with sub-50ms latency and 99.9% uptime.",
   },
   {
-    question: "Do you work with clients remotely?",
+    question: "Do you work remotely?",
     answer:
-      "Yes, I work with clients worldwide remotely. I use tools like Slack, Zoom, and GitHub for seamless communication and collaboration regardless of timezone.",
+      "Yes, I'm based in Sitapur, Uttar Pradesh and work remotely with teams across India. I've completed remote internships at Xenovate Tech Solutions and Unified Mentor, and currently work with companies in Lucknow.",
   },
   {
     question: "What is your development process?",
     answer:
-      "My process includes discovery and planning, design review, iterative development with regular updates, testing and optimization, and deployment with post-launch support. I believe in transparent communication throughout.",
+      "My process covers schema design, REST API development, frontend implementation with loading states and error boundaries, JWT/RBAC security, performance optimization (code-splitting, lazy loading, CDN), and CI/CD deployment with automated rollback.",
   },
   {
-    question: "Do you provide ongoing maintenance and support?",
+    question: "Do you offer mentoring or training?",
     answer:
-      "Yes, I offer ongoing maintenance packages including bug fixes, security updates, performance monitoring, and feature enhancements. We can discuss a support plan that fits your needs.",
+      "Yes. At CodingClave Development LLP, I mentor B.Tech, BCA, and MCA students in MERN stack and DSA — including curriculum design, capstone reviews, and production-grade code reviews.",
   },
   {
-    question: "How do you ensure website performance and SEO?",
+    question: "How do you ensure performance and security?",
     answer:
-      "I follow best practices for Core Web Vitals, implement proper meta tags and structured data, optimize images, use server-side rendering where appropriate, and conduct Lighthouse audits to ensure 90+ scores.",
+      "I implement JWT/RBAC authentication, bcrypt hashing, Cloudflare CDN/WAF for DDoS protection, asset compression, code-splitting, lazy loading, and Core Web Vitals optimization. Production deployments maintain 99.9%+ uptime via CI/CD with automated rollback.",
   },
   {
-    question: "What are your rates for freelance projects?",
+    question: "Are you available for full-time or freelance work?",
     answer:
-      "Rates depend on project complexity and scope. I offer both fixed-price and hourly arrangements. Contact me with your project details for a customized quote.",
+      "Yes, I'm available for full-time roles, freelance projects, and mentoring opportunities. Reach out via email at yashtrivedi.contact@gmail.com or through the contact form on this site.",
   },
 ];

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e1b4b"/><stop offset="100%" stop-color="#312e81"/></linearGradient></defs>
+  <rect width="800" height="450" fill="url(#g)"/>
+  <rect x="40" y="40" width="720" height="50" rx="8" fill="#334155"/>
+  <rect x="40" y="110" width="340" height="280" rx="12" fill="#475569" opacity="0.5"/>
+  <rect x="400" y="110" width="360" height="130" rx="12" fill="#7c3aed" opacity="0.3"/>
+  <rect x="400" y="260" width="360" height="130" rx="12" fill="#4f46e5" opacity="0.3"/>
+  <text x="400" y="420" text-anchor="middle" font-family="system-ui" font-size="18" fill="#94a3b8">Modern Business Website</text>
+</svg>

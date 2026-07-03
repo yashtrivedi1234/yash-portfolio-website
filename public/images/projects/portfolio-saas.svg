@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4c1d95"/><stop offset="100%" stop-color="#5b21b6"/></linearGradient></defs>
+  <rect width="800" height="450" fill="url(#g)"/>
+  <rect x="60" y="60" width="300" height="330" rx="16" fill="#1e1b4b" opacity="0.8"/>
+  <rect x="400" y="60" width="340" height="150" rx="12" fill="#8b5cf6" opacity="0.3"/>
+  <rect x="400" y="230" width="160" height="160" rx="12" fill="#a78bfa" opacity="0.2"/>
+  <rect x="580" y="230" width="160" height="160" rx="12" fill="#c4b5fd" opacity="0.2"/>
+  <text x="400" y="420" text-anchor="middle" font-family="system-ui" font-size="18" fill="#c4b5fd">Portfolio Builder SaaS</text>
+</svg>

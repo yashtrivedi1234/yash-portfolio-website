@@ -1,0 +1,68 @@
+export const siteConfig = {
+  name: "Alex Morgan",
+  role: "Full-Stack Developer",
+  shortBio:
+    "I build fast, modern, and scalable web applications with Next.js, React, and TypeScript.",
+  longBio:
+    "I'm a passionate full-stack developer with 5+ years of experience crafting high-performance web applications. I specialize in Next.js, React, and modern JavaScript ecosystems, delivering clean code, pixel-perfect UI, and SEO-friendly solutions for startups, agencies, and businesses worldwide.",
+  email: "alex.morgan@example.com",
+  phone: "+1 (555) 123-4567",
+  location: "San Francisco, CA",
+  resumeLink: "/resume.pdf",
+  github: "https://github.com/alexmorgan-dev",
+  linkedin: "https://linkedin.com/in/alexmorgan-dev",
+  twitter: "https://twitter.com/alexmorgan_dev",
+  instagram: "https://instagram.com/alexmorgan.dev",
+  portfolioUrl: "https://alexmorgan.dev",
+  availability: "Available for freelance projects and full-time opportunities",
+  seo: {
+    title: "Alex Morgan | Full-Stack Developer Portfolio",
+    description:
+      "Professional full-stack developer portfolio showcasing modern web development projects, skills, and services. Expert in Next.js, React, TypeScript, and SEO-friendly website development.",
+    keywords: [
+      "Developer Portfolio",
+      "Full Stack Developer",
+      "Frontend Developer",
+      "Next.js Developer",
+      "React Developer",
+      "Web Developer",
+      "Freelance Web Developer",
+      "Website Developer",
+      "Portfolio Website Developer",
+      "Modern Website Development",
+      "SEO Friendly Website Developer",
+      "Fast Website Developer",
+      "Next.js Portfolio Website",
+      "React Portfolio Website",
+      "Professional Developer Portfolio",
+    ],
+    ogImage: "/og-image.svg",
+    author: "Alex Morgan",
+    publisher: "Alex Morgan",
+    themeColor: "#0f172a",
+  },
+  stats: [
+    { label: "Projects Completed", value: "50+" },
+    { label: "Happy Clients", value: "35+" },
+    { label: "Years Experience", value: "5+" },
+    { label: "Technologies", value: "25+" },
+  ],
+  socialLinks: [
+    { name: "GitHub", href: "https://github.com/alexmorgan-dev", icon: "github" },
+    { name: "LinkedIn", href: "https://linkedin.com/in/alexmorgan-dev", icon: "linkedin" },
+    { name: "Twitter", href: "https://twitter.com/alexmorgan_dev", icon: "twitter" },
+    { name: "Instagram", href: "https://instagram.com/alexmorgan.dev", icon: "instagram" },
+    { name: "Email", href: "mailto:alex.morgan@example.com", icon: "email" },
+  ],
+  navLinks: [
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Projects", href: "/projects" },
+    { name: "Skills", href: "/skills" },
+    { name: "Services", href: "/services" },
+    { name: "Experience", href: "/experience" },
+    { name: "Contact", href: "/contact" },
+  ],
+} as const;
+
+export type SiteConfig = typeof siteConfig;

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs><linearGradient id="g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1c1917"/><stop offset="100%" stop-color="#292524"/></linearGradient></defs>
+  <rect width="800" height="450" fill="url(#g)"/>
+  <rect x="0" y="0" width="800" height="300" fill="#44403c" opacity="0.5"/>
+  <text x="400" y="160" text-anchor="middle" font-family="Georgia,serif" font-size="48" fill="#fafaf9">Fine Dining</text>
+  <rect x="200" y="200" width="400" height="50" rx="25" fill="#d97706" opacity="0.8"/>
+  <text x="400" y="232" text-anchor="middle" font-family="system-ui" font-size="16" fill="white">Reserve a Table</text>
+  <text x="400" y="420" text-anchor="middle" font-family="system-ui" font-size="18" fill="#a8a29e">Restaurant Landing Page</text>
+</svg>

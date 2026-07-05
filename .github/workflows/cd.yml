@@ -33,7 +33,12 @@ jobs:
         run: npm ci
 
       - name: Push Prisma schema
-        run: npx prisma db push --skip-generate
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::DATABASE_URL is empty. Add your Neon connection string as a GitHub Actions secret named DATABASE_URL (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+          npx prisma db push --skip-generate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 

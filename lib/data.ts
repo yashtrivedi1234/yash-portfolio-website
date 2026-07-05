@@ -54,6 +54,7 @@ async function loadProjects(): Promise<Project[]> {
     if (rows.length === 0) return staticProjects;
     return rows.map((p) => ({
       slug: p.slug,
+      title: p.title,
       image: p.image,
       liveUrl: p.liveUrl,
     }));

@@ -190,16 +190,16 @@ export function sanitizeLoginPayload(body: Record<string, unknown>) {
 
 export function sanitizeProjectPayload(body: Record<string, unknown>) {
   return {
+    title: sanitizeInput("title", String(body.title ?? "")),
     image: sanitizeInput("url", String(body.image ?? "")),
     liveUrl: sanitizeInput("url", String(body.liveUrl ?? "")),
   };
 }
 
-export function projectDbDefaults(count: number, slug?: string) {
-  const id = count + 1;
+export function projectDbDefaults(title: string, slug: string) {
   return {
-    title: `Project ${id}`,
-    slug: slug ?? `project-${id}-${Date.now()}`,
+    title,
+    slug,
     description: "",
     longDescription: "",
     techStack: [] as string[],

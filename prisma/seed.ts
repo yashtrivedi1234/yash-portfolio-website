@@ -1,12 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { getDefaultSiteConfig } from "../lib/site-config";
-import { projects } from "../data/projects";
+import { projects, toProjectDbRow } from "../data/projects";
 import { services } from "../data/services";
 import { skillCategories, techStackStrip } from "../data/skills";
 import { experienceItems } from "../data/experience";
 import { testimonials } from "../data/testimonials";
 import { faqs } from "../data/faqs";
+import { blogPosts } from "../data/blog";
 
 const prisma = new PrismaClient();
 
@@ -34,24 +35,20 @@ async function main() {
     create: { id: "default", data: siteConfig as object },
   });
 
-  await prisma.project.deleteMany();
-  await prisma.project.createMany({
-    data: projects.map((p, i) => ({
-      title: `Project ${i + 1}`,
-      slug: p.slug,
-      description: "",
-      longDescription: "",
-      image: p.image,
-      techStack: [],
-      category: "",
-      year: "",
-      status: "Completed",
-      featured: i < 3,
-      liveUrl: p.liveUrl,
-      features: [],
-      sortOrder: i,
-    })),
-  });
+  for (let i = 0; i < projects.length; i++) {
+    const row = toProjectDbRow(projects[i], i);
+    await prisma.project.upsert({
+      where: { slug: row.slug },
+      update: {
+        title: row.title,
+        image: row.image,
+        liveUrl: row.liveUrl,
+        sortOrder: row.sortOrder,
+        featured: row.featured,
+      },
+      create: row,
+    });
+  }
 
   await prisma.service.deleteMany();
   await prisma.service.createMany({
@@ -123,6 +120,32 @@ async function main() {
   await prisma.techStackItem.createMany({
     data: techStackStrip.map((item, i) => ({ name: item.name, sortOrder: i })),
   });
+
+  for (let i = 0; i < blogPosts.length; i++) {
+    const post = blogPosts[i];
+    await prisma.blogPost.upsert({
+      where: { slug: post.slug },
+      update: {
+        title: post.title,
+        excerpt: post.excerpt,
+        content: post.content,
+        coverImage: post.coverImage ?? null,
+        published: true,
+        publishedAt: new Date(post.publishedAt),
+        sortOrder: i,
+      },
+      create: {
+        title: post.title,
+        slug: post.slug,
+        excerpt: post.excerpt,
+        content: post.content,
+        coverImage: post.coverImage ?? null,
+        published: true,
+        publishedAt: new Date(post.publishedAt),
+        sortOrder: i,
+      },
+    });
+  }
 
   console.log("Database seeded successfully!");
   console.log(`Admin login: ${email} / ${password}`);

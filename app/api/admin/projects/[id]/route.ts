@@ -11,17 +11,18 @@ export async function PUT(request: Request, { params }: Params) {
 
   const { id } = await params;
   const body = sanitizeProjectPayload(await request.json());
-  if (!body.image || !body.liveUrl) {
-    return NextResponse.json({ error: "Image and live URL are required" }, { status: 400 });
+  if (!body.title || !body.image || !body.liveUrl) {
+    return NextResponse.json({ error: "Project name, image, and live URL are required" }, { status: 400 });
   }
 
   const project = await prisma.project.update({
     where: { id },
     data: {
+      title: body.title,
       image: body.image,
       liveUrl: body.liveUrl,
     },
-    select: { id: true, image: true, liveUrl: true },
+    select: { id: true, title: true, image: true, liveUrl: true },
   });
   return NextResponse.json({ project });
 }

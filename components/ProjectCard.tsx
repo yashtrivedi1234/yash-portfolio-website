@@ -19,7 +19,7 @@ export function ProjectCard({ project, labels }: ProjectCardProps) {
       >
         <Image
           src={project.image}
-          alt={labels.liveDemo}
+          alt={project.title}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -28,6 +28,7 @@ export function ProjectCard({ project, labels }: ProjectCardProps) {
       </a>
 
       <div className="p-4">
+        <h3 className="mb-3 text-lg font-semibold text-white">{project.title}</h3>
         <Button href={project.liveUrl} size="sm" external className="w-full justify-center">
           {labels.liveDemo}
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

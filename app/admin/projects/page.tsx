@@ -20,11 +20,13 @@ import { notify } from "@/lib/toast";
 
 interface Project {
   id: string;
+  title: string;
   image: string;
   liveUrl: string;
 }
 
 const emptyProject = {
+  title: "",
   image: "/images/projects/ecommerce-dashboard.svg",
   liveUrl: "",
 };
@@ -41,6 +43,7 @@ export default function AdminProjectsPage() {
   function openEditProject(p: Project) {
     setEditing({
       id: p.id,
+      title: p.title,
       image: p.image,
       liveUrl: p.liveUrl,
     });
@@ -62,6 +65,10 @@ export default function AdminProjectsPage() {
   async function handleSave() {
     if (!editing) return;
 
+    if (!editing.title.trim()) {
+      notify.error("Project name is required");
+      return;
+    }
     if (!editing.image.trim()) {
       notify.error("Project image is required");
       return;
@@ -72,6 +79,7 @@ export default function AdminProjectsPage() {
     }
 
     const payload = {
+      title: editing.title,
       image: editing.image,
       liveUrl: editing.liveUrl,
     };
@@ -107,7 +115,7 @@ export default function AdminProjectsPage() {
       <div className={adminToolbarClass}>
         <AdminPageHeader
           title="Projects"
-          description="Add projects with an image and live URL only."
+          description="Add projects with a name, image, and live URL."
           className="mb-0"
         />
         <button onClick={openNewProject} className={`${adminBtnPrimary} shrink-0 self-start`}>
@@ -118,6 +126,16 @@ export default function AdminProjectsPage() {
       {editing && (
         <div className={`${adminCardClass} mb-6 space-y-4`}>
           <h3 className="font-semibold text-white">{editing.id ? "Edit Project" : "New Project"}</h3>
+          <div>
+            <label className={adminLabelClass}>Project Name</label>
+            <ValidatedInput
+              fieldType="title"
+              className={adminInputClass}
+              value={editing.title}
+              onValueChange={(title) => setEditing({ ...editing, title })}
+              placeholder="E-Commerce Dashboard"
+            />
+          </div>
           <FileUploadField
             label="Project Image"
             accept="image/jpeg,image/png,image/webp,image/svg+xml"
@@ -162,7 +180,10 @@ export default function AdminProjectsPage() {
               <div className="relative h-14 w-24 shrink-0 overflow-hidden rounded-lg border border-slate-700">
                 <Image src={p.image} alt="" fill className="object-cover" />
               </div>
-              <p className="truncate text-sm text-slate-400">{p.liveUrl}</p>
+              <div className="min-w-0">
+                <p className="truncate font-medium text-white">{p.title}</p>
+                <p className="truncate text-sm text-slate-400">{p.liveUrl}</p>
+              </div>
             </div>
             <div className="flex shrink-0 flex-wrap gap-2">
               <button onClick={() => openEditProject(p)} className={adminBtnSecondary}>

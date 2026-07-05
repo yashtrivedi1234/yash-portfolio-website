@@ -56,6 +56,9 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(config.portfolioUrl),
     alternates: { canonical: config.portfolioUrl },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+    verification: {
+      google: "BwlnA0OBAVBwlNSpRNJ6yxOWNyW71RZ8U3oEWcV51Ms",
+    },
     openGraph: {
       title: config.seo.title,
       description: config.seo.description,

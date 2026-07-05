@@ -1,8 +1,13 @@
 import type { MetadataRoute } from "next";
 import { getSiteConfig } from "@/lib/data";
+import { getFaviconType, resolveFaviconUrl } from "@/lib/favicon";
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const config = await getSiteConfig();
+  const iconUrl = resolveFaviconUrl(
+    config.seo.favicon || config.manifest.iconUrl,
+    config.portfolioUrl
+  );
 
   return {
     name: config.manifest.name,
@@ -14,9 +19,9 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     theme_color: config.seo.themeColor,
     icons: [
       {
-        src: config.manifest.iconUrl,
+        src: iconUrl,
         sizes: "any",
-        type: config.manifest.iconUrl.endsWith(".svg") ? "image/svg+xml" : "image/png",
+        type: getFaviconType(iconUrl),
       },
     ],
   };

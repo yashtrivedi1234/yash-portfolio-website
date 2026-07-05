@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { requireAdminApi } from "@/lib/admin-api";
 import { mergeSiteConfig } from "@/lib/site-config";
@@ -23,6 +24,8 @@ export async function PUT(request: Request) {
     update: { data },
     create: { id: "default", data },
   });
+
+  revalidatePath("/", "layout");
 
   return NextResponse.json({ data: settings.data });
 }

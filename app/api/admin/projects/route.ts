@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAdminApi } from "@/lib/admin-api";
-import { sanitizeProjectPayload } from "@/lib/sanitize-api";
+import { projectDbDefaults, sanitizeProjectPayload } from "@/lib/sanitize-api";
 
 export async function GET() {
   const { error } = await requireAdminApi();
   if (error) return error;
-  const projects = await prisma.project.findMany({ orderBy: { sortOrder: "asc" } });
-  return NextResponse.json({ projects });
+  const rows = await prisma.project.findMany({
+    orderBy: { sortOrder: "asc" },
+    select: { id: true, image: true, liveUrl: true },
+  });
+  return NextResponse.json({ projects: rows });
 }
 
 export async function POST(request: Request) {
@@ -15,28 +18,20 @@ export async function POST(request: Request) {
   if (error) return error;
 
   const body = sanitizeProjectPayload(await request.json());
+  if (!body.image || !body.liveUrl) {
+    return NextResponse.json({ error: "Image and live URL are required" }, { status: 400 });
+  }
+
   const count = await prisma.project.count();
+  const defaults = projectDbDefaults(count);
   const project = await prisma.project.create({
     data: {
-      title: body.title,
-      slug: body.slug,
-      description: body.description,
-      longDescription: body.longDescription,
+      ...defaults,
       image: body.image,
-      techStack: body.techStack,
-      category: body.category,
-      year: body.year,
-      status: body.status,
-      featured: body.featured,
       liveUrl: body.liveUrl,
-      features: body.features,
-      problem: body.problem,
-      solution: body.solution,
-      result: body.result,
-      metrics: body.metrics ?? undefined,
-      gallery: body.gallery,
       sortOrder: count,
     },
+    select: { id: true, image: true, liveUrl: true },
   });
   return NextResponse.json({ project });
 }

@@ -37,18 +37,18 @@ async function main() {
   await prisma.project.deleteMany();
   await prisma.project.createMany({
     data: projects.map((p, i) => ({
-      title: p.title,
+      title: `Project ${i + 1}`,
       slug: p.slug,
-      description: p.description,
-      longDescription: p.longDescription,
+      description: "",
+      longDescription: "",
       image: p.image,
-      techStack: p.techStack,
-      category: p.category,
-      year: p.year,
-      status: p.status,
-      featured: p.featured,
+      techStack: [],
+      category: "",
+      year: "",
+      status: "Completed",
+      featured: i < 3,
       liveUrl: p.liveUrl,
-      features: p.features,
+      features: [],
       sortOrder: i,
     })),
   });

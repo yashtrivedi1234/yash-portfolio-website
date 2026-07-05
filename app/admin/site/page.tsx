@@ -29,17 +29,34 @@ export default function AdminSitePage() {
       .then(({ data: d }) => { setData(d); setLoading(false); });
   }, []);
 
-  async function save() {
-    if (!data) return;
+  async function save(nextData?: SiteData) {
+    const payload = nextData ?? data;
+    if (!payload) return;
     setSaving(true);
     const res = await fetch("/api/admin/site", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
     setSaving(false);
-    if (res.ok) notify.success("Saved successfully!");
-    else notify.error("Failed to save");
+    if (res.ok) {
+      notify.success("Saved successfully!");
+      if (nextData) setData(nextData);
+    } else {
+      notify.error("Failed to save");
+    }
+  }
+
+  async function saveFavicon(url: string) {
+    if (!data) return;
+    const next = sanitizeDeepConfig(
+      deepMerge(data as unknown as Record<string, unknown>, {
+        seo: { ...data.seo, favicon: url },
+        manifest: { ...data.manifest, iconUrl: url },
+      })
+    ) as unknown as SiteData;
+    setData(next);
+    await save(next);
   }
 
   function update(partial: Partial<SiteData>) {
@@ -154,7 +171,7 @@ export default function AdminSitePage() {
               uploadType="favicon"
               previewShape="square"
               currentUrl={data.seo.favicon}
-              onUploaded={(url) => update({ seo: { ...data.seo, favicon: url } })}
+              onUploaded={saveFavicon}
             />
             <FileUploadField
               label="Upload OG Image"
@@ -429,7 +446,7 @@ export default function AdminSitePage() {
           </>
         )}
 
-        <button onClick={save} disabled={saving} className={adminBtnPrimary}>
+        <button onClick={() => save()} disabled={saving} className={adminBtnPrimary}>
           {saving ? "Saving..." : "Save All Settings"}
         </button>
       </div>

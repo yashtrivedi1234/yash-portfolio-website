@@ -189,37 +189,30 @@ export function sanitizeLoginPayload(body: Record<string, unknown>) {
 }
 
 export function sanitizeProjectPayload(body: Record<string, unknown>) {
-  const metrics = body.metrics;
   return {
-    title: sanitizeInput("title", String(body.title ?? "")),
-    slug: sanitizeInput("slug", String(body.slug ?? "")),
-    description: sanitizeInput("longText", String(body.description ?? "")),
-    longDescription: sanitizeInput("longText", String(body.longDescription ?? body.description ?? "")),
-    category: sanitizeInput("shortText", String(body.category ?? "Web Application")),
-    year: sanitizeInput("year", String(body.year ?? new Date().getFullYear().toString())),
-    liveUrl: sanitizeInput("url", String(body.liveUrl ?? "#")),
-    image: sanitizeInput("url", String(body.image ?? "/images/projects/ecommerce-dashboard.svg")),
-    status: sanitizeInput("shortText", String(body.status ?? "Completed")),
-    featured: Boolean(body.featured),
-    sortOrder: typeof body.sortOrder === "number" ? body.sortOrder : undefined,
-    problem: body.problem ? sanitizeInput("longText", String(body.problem)) : null,
-    solution: body.solution ? sanitizeInput("longText", String(body.solution)) : null,
-    result: body.result ? sanitizeInput("longText", String(body.result)) : null,
-    techStack: Array.isArray(body.techStack)
-      ? body.techStack.map((t) => sanitizeInput("techName", String(t)))
-      : [],
-    features: Array.isArray(body.features)
-      ? body.features.map((f) => sanitizeInput("shortText", String(f)))
-      : [],
-    gallery: Array.isArray(body.gallery)
-      ? body.gallery.map((g) => sanitizeInput("url", String(g)))
-      : [],
-    metrics: Array.isArray(metrics)
-      ? metrics.map((m: { value?: string; label?: string }) => ({
-          value: sanitizeInput("metricLine", String(m.value ?? "")),
-          label: sanitizeInput("shortText", String(m.label ?? "")),
-        }))
-      : null,
+    image: sanitizeInput("url", String(body.image ?? "")),
+    liveUrl: sanitizeInput("url", String(body.liveUrl ?? "")),
+  };
+}
+
+export function projectDbDefaults(count: number, slug?: string) {
+  const id = count + 1;
+  return {
+    title: `Project ${id}`,
+    slug: slug ?? `project-${id}-${Date.now()}`,
+    description: "",
+    longDescription: "",
+    techStack: [] as string[],
+    category: "",
+    year: "",
+    status: "Completed",
+    featured: false,
+    features: [] as string[],
+    problem: null,
+    solution: null,
+    result: null,
+    metrics: undefined,
+    gallery: [] as string[],
   };
 }
 

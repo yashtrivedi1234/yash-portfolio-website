@@ -2,7 +2,7 @@ import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import { getDefaultSiteConfig, mergeSiteConfig, type SiteConfig } from "@/lib/site-config";
-import { projects as staticProjects, type Project, type ProjectMetric } from "@/data/projects";
+import { projects as staticProjects, type Project } from "@/data/projects";
 import { services as staticServices, type Service } from "@/data/services";
 import { skillCategories as staticSkillCategories, techStackStrip as staticTechStack, type SkillCategory, type TechStackMarqueeItem } from "@/data/skills";
 import { experienceItems as staticExperience, type ExperienceItem } from "@/data/experience";
@@ -51,23 +51,9 @@ async function loadProjects(): Promise<Project[]> {
     const rows = await prisma.project.findMany({ orderBy: { sortOrder: "asc" } });
     if (rows.length === 0) return staticProjects;
     return rows.map((p) => ({
-      title: p.title,
       slug: p.slug,
-      description: p.description,
-      longDescription: p.longDescription,
       image: p.image,
-      techStack: p.techStack,
-      category: p.category,
-      year: p.year,
-      status: p.status as Project["status"],
-      featured: p.featured,
       liveUrl: p.liveUrl,
-      features: p.features,
-      problem: p.problem ?? undefined,
-      solution: p.solution ?? undefined,
-      result: p.result ?? undefined,
-      metrics: (p.metrics as unknown as ProjectMetric[] | null) ?? undefined,
-      gallery: (p.gallery?.length ?? 0) > 0 ? p.gallery : undefined,
     }));
   } catch {
     return staticProjects;
@@ -176,7 +162,12 @@ async function loadFaqs(): Promise<FAQ[]> {
   }
 }
 
-const getSiteConfigCached = unstable_cache(loadSiteConfig, ["site-config"], { revalidate: REVALIDATE_SECONDS });
+export const SITE_CONFIG_CACHE_TAG = "site-config";
+
+const getSiteConfigCached = unstable_cache(loadSiteConfig, ["site-config"], {
+  revalidate: REVALIDATE_SECONDS,
+  tags: [SITE_CONFIG_CACHE_TAG],
+});
 const getProjectsCached = unstable_cache(loadProjects, ["projects"], { revalidate: REVALIDATE_SECONDS });
 const getServicesCached = unstable_cache(loadServices, ["services"], { revalidate: REVALIDATE_SECONDS });
 const getSkillCategoriesCached = unstable_cache(loadSkillCategories, ["skill-categories"], { revalidate: REVALIDATE_SECONDS });
@@ -201,7 +192,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | undefine
 
 export async function getFeaturedProjects(): Promise<Project[]> {
   const projects = await getProjects();
-  return projects.filter((p) => p.featured);
+  return projects.slice(0, 6);
 }
 
 export async function getAdminStats() {

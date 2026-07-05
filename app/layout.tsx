@@ -3,15 +3,8 @@ import { Inter, JetBrains_Mono, Syne } from "next/font/google";
 import { RootJsonLd } from "@/components/RootJsonLd";
 import { getSiteConfig } from "@/lib/data";
 import { getDefaultSiteConfig } from "@/lib/site-config";
+import { getFaviconType, resolveFaviconUrl } from "@/lib/favicon";
 import "./globals.css";
-
-function getFaviconType(url: string): string {
-  if (url.endsWith(".svg")) return "image/svg+xml";
-  if (url.endsWith(".png")) return "image/png";
-  if (url.endsWith(".webp")) return "image/webp";
-  if (url.endsWith(".ico")) return "image/x-icon";
-  return "image/png";
-}
 
 const inter = Inter({
   variable: "--font-inter",
@@ -43,7 +36,12 @@ export async function generateViewport(): Promise<Viewport> {
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig();
-  const faviconType = getFaviconType(config.seo.favicon);
+  const faviconUrl = resolveFaviconUrl(config.seo.favicon, config.portfolioUrl);
+  const faviconType = getFaviconType(faviconUrl);
+  const appleIconUrl = resolveFaviconUrl(
+    config.manifest.iconUrl || config.seo.favicon,
+    config.portfolioUrl
+  );
 
   return {
     title: { default: config.seo.title, template: `%s | ${config.name}` },
@@ -74,9 +72,9 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [config.seo.ogImage],
     },
     icons: {
-      icon: [{ url: config.seo.favicon, type: faviconType }],
-      apple: config.manifest.iconUrl,
-      shortcut: config.seo.favicon,
+      icon: [{ url: faviconUrl, type: faviconType }],
+      apple: [{ url: appleIconUrl, type: getFaviconType(appleIconUrl) }],
+      shortcut: faviconUrl,
     },
     other: {
       "application-name": config.name,

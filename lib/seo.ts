@@ -140,12 +140,8 @@ export function createFAQSchema(faqs: { question: string; answer: string }[]) {
 
 export function createProjectSchema(
   project: {
-    title: string;
-    description: string;
     slug: string;
     image: string;
-    year: string;
-    techStack: string[];
     liveUrl: string;
   },
   config?: SiteConfig
@@ -155,17 +151,13 @@ export function createProjectSchema(
   return {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
-    name: project.title,
-    description: project.description,
-    url: `${baseUrl}/projects/${project.slug}`,
+    name: c.labels.liveDemo,
+    url: project.liveUrl,
     image: resolveAssetUrl(baseUrl, project.image),
-    dateCreated: project.year,
     creator: {
       "@type": "Person",
       name: c.name,
     },
-    keywords: project.techStack.join(", "),
     isAccessibleForFree: true,
-    license: project.liveUrl,
   };
 }

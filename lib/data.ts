@@ -1,3 +1,5 @@
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import { getDefaultSiteConfig, mergeSiteConfig, type SiteConfig } from "@/lib/site-config";
 import { projects as staticProjects, type Project, type ProjectMetric } from "@/data/projects";
@@ -9,17 +11,27 @@ import { faqs as staticFaqs, type FAQ } from "@/data/faqs";
 
 export type { SiteConfig } from "@/lib/site-config";
 
-async function isDbConnected() {
-  try {
-    if (!process.env.DATABASE_URL) return false;
-    await prisma.$queryRaw`SELECT 1`;
-    return true;
-  } catch {
-    return false;
-  }
+const REVALIDATE_SECONDS = 60;
+
+const getDbConnected = unstable_cache(
+  async (): Promise<boolean> => {
+    try {
+      if (!process.env.DATABASE_URL) return false;
+      await prisma.$queryRaw`SELECT 1`;
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  ["db-connected"],
+  { revalidate: REVALIDATE_SECONDS }
+);
+
+async function isDbConnected(): Promise<boolean> {
+  return getDbConnected();
 }
 
-export async function getSiteConfig(): Promise<SiteConfig> {
+async function loadSiteConfig(): Promise<SiteConfig> {
   const defaults = getDefaultSiteConfig();
   if (!(await isDbConnected())) return defaults;
 
@@ -32,7 +44,7 @@ export async function getSiteConfig(): Promise<SiteConfig> {
   }
 }
 
-export async function getProjects(): Promise<Project[]> {
+async function loadProjects(): Promise<Project[]> {
   if (!(await isDbConnected())) return staticProjects;
 
   try {
@@ -62,17 +74,7 @@ export async function getProjects(): Promise<Project[]> {
   }
 }
 
-export async function getProjectBySlug(slug: string): Promise<Project | undefined> {
-  const projects = await getProjects();
-  return projects.find((p) => p.slug === slug);
-}
-
-export async function getFeaturedProjects(): Promise<Project[]> {
-  const projects = await getProjects();
-  return projects.filter((p) => p.featured);
-}
-
-export async function getServices(): Promise<Service[]> {
+async function loadServices(): Promise<Service[]> {
   if (!(await isDbConnected())) return staticServices;
 
   try {
@@ -89,7 +91,7 @@ export async function getServices(): Promise<Service[]> {
   }
 }
 
-export async function getSkillCategories(): Promise<SkillCategory[]> {
+async function loadSkillCategories(): Promise<SkillCategory[]> {
   if (!(await isDbConnected())) return staticSkillCategories;
 
   try {
@@ -108,7 +110,7 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
   }
 }
 
-export async function getTechStackStrip(): Promise<string[]> {
+async function loadTechStackStrip(): Promise<string[]> {
   if (!(await isDbConnected())) return [...staticTechStack];
 
   try {
@@ -120,7 +122,7 @@ export async function getTechStackStrip(): Promise<string[]> {
   }
 }
 
-export async function getExperienceItems(): Promise<ExperienceItem[]> {
+async function loadExperienceItems(): Promise<ExperienceItem[]> {
   if (!(await isDbConnected())) return staticExperience;
 
   try {
@@ -140,7 +142,7 @@ export async function getExperienceItems(): Promise<ExperienceItem[]> {
   }
 }
 
-export async function getTestimonials(): Promise<Testimonial[]> {
+async function loadTestimonials(): Promise<Testimonial[]> {
   if (!(await isDbConnected())) return staticTestimonials;
 
   try {
@@ -159,7 +161,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
   }
 }
 
-export async function getFaqs(): Promise<FAQ[]> {
+async function loadFaqs(): Promise<FAQ[]> {
   if (!(await isDbConnected())) return staticFaqs;
 
   try {
@@ -169,6 +171,34 @@ export async function getFaqs(): Promise<FAQ[]> {
   } catch {
     return staticFaqs;
   }
+}
+
+const getSiteConfigCached = unstable_cache(loadSiteConfig, ["site-config"], { revalidate: REVALIDATE_SECONDS });
+const getProjectsCached = unstable_cache(loadProjects, ["projects"], { revalidate: REVALIDATE_SECONDS });
+const getServicesCached = unstable_cache(loadServices, ["services"], { revalidate: REVALIDATE_SECONDS });
+const getSkillCategoriesCached = unstable_cache(loadSkillCategories, ["skill-categories"], { revalidate: REVALIDATE_SECONDS });
+const getTechStackStripCached = unstable_cache(loadTechStackStrip, ["tech-stack"], { revalidate: REVALIDATE_SECONDS });
+const getExperienceItemsCached = unstable_cache(loadExperienceItems, ["experience"], { revalidate: REVALIDATE_SECONDS });
+const getTestimonialsCached = unstable_cache(loadTestimonials, ["testimonials"], { revalidate: REVALIDATE_SECONDS });
+const getFaqsCached = unstable_cache(loadFaqs, ["faqs"], { revalidate: REVALIDATE_SECONDS });
+
+export const getSiteConfig = cache(getSiteConfigCached);
+export const getProjects = cache(getProjectsCached);
+export const getServices = cache(getServicesCached);
+export const getSkillCategories = cache(getSkillCategoriesCached);
+export const getTechStackStrip = cache(getTechStackStripCached);
+export const getExperienceItems = cache(getExperienceItemsCached);
+export const getTestimonials = cache(getTestimonialsCached);
+export const getFaqs = cache(getFaqsCached);
+
+export async function getProjectBySlug(slug: string): Promise<Project | undefined> {
+  const projects = await getProjects();
+  return projects.find((p) => p.slug === slug);
+}
+
+export async function getFeaturedProjects(): Promise<Project[]> {
+  const projects = await getProjects();
+  return projects.filter((p) => p.featured);
 }
 
 export async function getAdminStats() {

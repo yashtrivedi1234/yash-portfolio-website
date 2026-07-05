@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Syne } from "next/font/google";
 import { RootJsonLd } from "@/components/RootJsonLd";
-import { ToastProvider } from "@/components/ToastProvider";
 import { getSiteConfig } from "@/lib/data";
 import { getDefaultSiteConfig } from "@/lib/site-config";
 import "./globals.css";
@@ -30,7 +29,7 @@ const syne = Syne({
   variable: "--font-syne",
   subsets: ["latin"],
   display: "swap",
-  weight: ["600", "700", "800"],
+  weight: ["700"],
 });
 
 export async function generateViewport(): Promise<Viewport> {
@@ -96,7 +95,6 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-slate-950 text-slate-100 antialiased">
         {children}
-        <ToastProvider />
       </body>
     </html>
   );

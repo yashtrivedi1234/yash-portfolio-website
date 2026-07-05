@@ -1,16 +1,13 @@
+import dynamic from "next/dynamic";
 import { Hero } from "@/components/Hero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ServiceCard } from "@/components/ServiceCard";
 import { ExperienceTimeline } from "@/components/ExperienceTimeline";
-import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
-import { FAQ } from "@/components/FAQ";
 import { CTA } from "@/components/CTA";
 import { Button } from "@/components/Button";
 import { JsonLd } from "@/components/JsonLd";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { StatCounter } from "@/components/StatCounter";
-import { TechMarquee } from "@/components/TechMarquee";
-import { FeaturedProjectsBento } from "@/components/FeaturedProjectsBento";
 import {
   getSiteConfig,
   getFeaturedProjects,
@@ -21,6 +18,28 @@ import {
   getTechStackStrip,
 } from "@/lib/data";
 import { createPageMetadata, createFAQSchema } from "@/lib/seo";
+
+const TechMarquee = dynamic(
+  () => import("@/components/TechMarquee").then((m) => m.TechMarquee),
+  { loading: () => <div className="h-16 border-y border-slate-800/80 bg-slate-900/40" /> }
+);
+
+const FeaturedProjectsBento = dynamic(
+  () => import("@/components/FeaturedProjectsBento").then((m) => m.FeaturedProjectsBento),
+  { loading: () => <div className="grid min-h-[420px] gap-6 md:grid-cols-2 lg:grid-cols-3" /> }
+);
+
+const TestimonialsCarousel = dynamic(
+  () => import("@/components/TestimonialsCarousel").then((m) => m.TestimonialsCarousel),
+  { loading: () => <div className="mx-auto h-64 max-w-3xl animate-pulse rounded-2xl bg-slate-800/40" /> }
+);
+
+const FAQ = dynamic(
+  () => import("@/components/FAQ").then((m) => m.FAQ),
+  { loading: () => <div className="mx-auto h-48 max-w-3xl animate-pulse rounded-2xl bg-slate-800/40" /> }
+);
+
+export const revalidate = 60;
 
 export async function generateMetadata() {
   const config = await getSiteConfig();
@@ -86,15 +105,13 @@ export default async function HomePage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2">
-                {config.stats.map((stat, i) => (
-                  <RevealOnScroll key={stat.label} delay={i * 80}>
-                    <div className="glass-card rounded-2xl p-4 text-center transition-transform duration-300 hover:-translate-y-1 sm:p-6">
-                      <div className="text-2xl font-bold text-gradient sm:text-3xl">
-                        <StatCounter value={stat.value} />
-                      </div>
-                      <div className="mt-1 text-sm text-slate-400">{stat.label}</div>
+                {config.stats.map((stat) => (
+                  <div key={stat.label} className="glass-card rounded-2xl p-4 text-center transition-transform duration-300 hover:-translate-y-1 sm:p-6">
+                    <div className="text-2xl font-bold text-gradient sm:text-3xl">
+                      <StatCounter value={stat.value} />
                     </div>
-                  </RevealOnScroll>
+                    <div className="mt-1 text-sm text-slate-400">{stat.label}</div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -106,11 +123,9 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <SectionHeading label={sections.projects.label} title={sections.projects.title} description={sections.projects.description} />
-          </RevealOnScroll>
-          <RevealOnScroll delay={120} className="mt-10">
-            <FeaturedProjectsBento projects={featuredProjects} labels={config.labels} />
-          </RevealOnScroll>
-          <RevealOnScroll delay={200}>
+            <div className="mt-10">
+              <FeaturedProjectsBento projects={featuredProjects} labels={config.labels} />
+            </div>
             <div className="mt-12 text-center">
               <Button href="/projects" variant="outline" size="lg">{config.buttons.viewAllProjects}</Button>
             </div>
@@ -122,15 +137,11 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <SectionHeading label={sections.services.label} title={sections.services.title} description={sections.services.description} />
-          </RevealOnScroll>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {services.slice(0, 6).map((service, i) => (
-              <RevealOnScroll key={service.title} delay={i * 60}>
-                <ServiceCard service={service} getStartedLabel={config.labels.getStarted} />
-              </RevealOnScroll>
-            ))}
-          </div>
-          <RevealOnScroll delay={200}>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {services.slice(0, 6).map((service) => (
+                <ServiceCard key={service.title} service={service} getStartedLabel={config.labels.getStarted} />
+              ))}
+            </div>
             <div className="mt-12 text-center">
               <Button href="/services" variant="outline" size="lg">{config.buttons.viewAllServices}</Button>
             </div>
@@ -142,11 +153,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <SectionHeading label={sections.experience.label} title={sections.experience.title} description={sections.experience.description} />
-          </RevealOnScroll>
-          <RevealOnScroll delay={100}>
             <ExperienceTimeline items={workExperience} />
-          </RevealOnScroll>
-          <RevealOnScroll delay={180}>
             <div className="text-center">
               <Button href="/experience" variant="outline" size="lg">{config.buttons.viewFullExperience}</Button>
             </div>
@@ -158,19 +165,17 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <SectionHeading label={sections.achievements.label} title={sections.achievements.title} description={sections.achievements.description} />
-          </RevealOnScroll>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {config.stats.map((stat, i) => (
-              <RevealOnScroll key={`ach-${stat.label}`} delay={i * 70}>
-                <div className="glass-card group p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/30">
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {config.stats.map((stat) => (
+                <div key={`ach-${stat.label}`} className="glass-card group p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/30">
                   <div className="text-4xl font-bold text-gradient">
                     <StatCounter value={stat.value} />
                   </div>
                   <div className="mt-2 text-slate-400">{stat.label}</div>
                 </div>
-              </RevealOnScroll>
-            ))}
-          </div>
+              ))}
+            </div>
+          </RevealOnScroll>
         </div>
       </section>
 
@@ -178,9 +183,9 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <SectionHeading label={sections.testimonials.label} title={sections.testimonials.title} description={sections.testimonials.description} />
-          </RevealOnScroll>
-          <RevealOnScroll delay={120} className="mt-10">
-            <TestimonialsCarousel testimonials={testimonials} />
+            <div className="mt-10">
+              <TestimonialsCarousel testimonials={testimonials} />
+            </div>
           </RevealOnScroll>
         </div>
       </section>
@@ -189,9 +194,9 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <SectionHeading label={sections.faq.label} title={sections.faq.title} description={sections.faq.description} />
-          </RevealOnScroll>
-          <RevealOnScroll delay={100} className="mt-10">
-            <FAQ faqs={faqs} />
+            <div className="mt-10">
+              <FAQ faqs={faqs} />
+            </div>
           </RevealOnScroll>
         </div>
       </section>

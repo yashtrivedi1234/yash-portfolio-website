@@ -4,6 +4,8 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { MobileHireBar } from "@/components/MobileHireBar";
 import { getSiteConfig } from "@/lib/data";
 
+export const revalidate = 60;
+
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const config = await getSiteConfig();
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   AdminLoading,
@@ -34,10 +34,19 @@ const emptyProject = {
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<(typeof emptyProject) & { id?: string } | null>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  function scrollToForm() {
+    requestAnimationFrame(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
 
   function openNewProject() {
     setEditing({ ...emptyProject });
+    scrollToForm();
   }
 
   function openEditProject(p: Project) {
@@ -47,6 +56,7 @@ export default function AdminProjectsPage() {
       image: p.image,
       liveUrl: p.liveUrl,
     });
+    scrollToForm();
   }
 
   function loadProjects() {
@@ -87,25 +97,38 @@ export default function AdminProjectsPage() {
     const url = editing.id ? `/api/admin/projects/${editing.id}` : "/api/admin/projects";
     const method = editing.id ? "PUT" : "POST";
 
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    setSaving(true);
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (res.ok) {
-      notify.success(editing.id ? "Project updated!" : "Project created!");
-      setEditing(null);
-      loadProjects();
-    } else {
-      notify.error("Failed to save project");
+      if (res.ok) {
+        notify.success(editing.id ? "Project updated!" : "Project created!");
+        setEditing(null);
+        loadProjects();
+      } else {
+        const data = await res.json();
+        notify.error(data.error ?? "Failed to save project");
+      }
+    } finally {
+      setSaving(false);
     }
   }
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this project?")) return;
-    await fetch(`/api/admin/projects/${id}`, { method: "DELETE" });
-    loadProjects();
+
+    const res = await fetch(`/api/admin/projects/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      notify.success("Project deleted");
+      if (editing?.id === id) setEditing(null);
+      loadProjects();
+    } else {
+      notify.error("Failed to delete project");
+    }
   }
 
   if (loading) return <AdminLoading />;
@@ -124,7 +147,7 @@ export default function AdminProjectsPage() {
       </div>
 
       {editing && (
-        <div className={`${adminCardClass} mb-6 space-y-4`}>
+        <div ref={formRef} className={`${adminCardClass} mb-6 space-y-4 scroll-mt-24`}>
           <h3 className="font-semibold text-white">{editing.id ? "Edit Project" : "New Project"}</h3>
           <div>
             <label className={adminLabelClass}>Project Name</label>
@@ -163,16 +186,25 @@ export default function AdminProjectsPage() {
             />
           </div>
           <div className="flex flex-wrap gap-3">
-            <button onClick={handleSave} className={adminBtnPrimary}>
-              Save
+            <button onClick={handleSave} className={adminBtnPrimary} disabled={saving}>
+              {saving ? "Saving..." : "Save"}
             </button>
-            <button onClick={() => setEditing(null)} className={adminBtnSecondary}>
+            <button onClick={() => setEditing(null)} className={adminBtnSecondary} disabled={saving}>
               Cancel
             </button>
           </div>
         </div>
       )}
 
+      {projects.length === 0 && !editing ? (
+        <div className={`${adminCardClass} py-12 text-center`}>
+          <p className="font-medium text-white">No projects yet</p>
+          <p className="mt-2 text-sm text-slate-400">Add your first project with a name, screenshot, and live URL.</p>
+          <button onClick={openNewProject} className={`${adminBtnPrimary} mt-6`}>
+            + Add Project
+          </button>
+        </div>
+      ) : (
       <div className="space-y-3">
         {projects.map((p) => (
           <div key={p.id} className={`${adminCardClass} ${adminListRowClass} gap-4`}>
@@ -186,6 +218,16 @@ export default function AdminProjectsPage() {
               </div>
             </div>
             <div className="flex shrink-0 flex-wrap gap-2">
+              {p.liveUrl && p.liveUrl !== "#" ? (
+                <a
+                  href={p.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={adminBtnSecondary}
+                >
+                  Open
+                </a>
+              ) : null}
               <button onClick={() => openEditProject(p)} className={adminBtnSecondary}>
                 Edit
               </button>
@@ -196,6 +238,7 @@ export default function AdminProjectsPage() {
           </div>
         ))}
       </div>
+      )}
     </>
   );
 }

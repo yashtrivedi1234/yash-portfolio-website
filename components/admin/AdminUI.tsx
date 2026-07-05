@@ -3,7 +3,13 @@ export const adminInputClass =
 
 export const adminLabelClass = "mb-1.5 block text-sm font-medium text-slate-300";
 
-export const adminCardClass = "rounded-2xl border border-slate-800 bg-slate-900/50 p-6";
+export const adminCardClass = "rounded-2xl border border-slate-800 bg-slate-900/50 p-4 sm:p-6";
+
+export const adminToolbarClass =
+  "mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-start sm:justify-between";
+
+export const adminListRowClass =
+  "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between";
 
 export const adminBtnPrimary =
   "inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500 disabled:opacity-50";
@@ -14,11 +20,19 @@ export const adminBtnSecondary =
 export const adminBtnDanger =
   "inline-flex items-center gap-2 rounded-xl border border-red-500/30 px-3 py-1.5 text-sm text-red-400 transition-colors hover:bg-red-500/10";
 
-export function AdminPageHeader({ title, description }: { title: string; description?: string }) {
+export function AdminPageHeader({
+  title,
+  description,
+  className = "mb-8",
+}: {
+  title: string;
+  description?: string;
+  className?: string;
+}) {
   return (
-    <div className="mb-8">
-      <h1 className="text-2xl font-bold text-white">{title}</h1>
-      {description && <p className="mt-1 text-slate-400">{description}</p>}
+    <div className={className}>
+      <h1 className="text-xl font-bold text-white sm:text-2xl">{title}</h1>
+      {description && <p className="mt-1 text-sm text-slate-400 sm:text-base">{description}</p>}
     </div>
   );
 }

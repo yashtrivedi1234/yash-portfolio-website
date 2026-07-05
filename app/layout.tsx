@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Syne } from "next/font/google";
 import { RootJsonLd } from "@/components/RootJsonLd";
 import { ToastProvider } from "@/components/ToastProvider";
 import { getSiteConfig } from "@/lib/data";
@@ -24,6 +24,13 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
   subsets: ["latin"],
   display: "swap",
+});
+
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["600", "700", "800"],
 });
 
 export async function generateViewport(): Promise<Viewport> {
@@ -80,7 +87,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${syne.variable} scroll-smooth`}>
       <head>
         <RootJsonLd />
       </head>

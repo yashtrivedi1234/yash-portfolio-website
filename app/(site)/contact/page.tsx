@@ -43,7 +43,7 @@ export default async function ContactPage() {
             </div>
 
             <div className="space-y-8">
-              <div className="glass-card rounded-2xl p-8">
+              <div className="glass-card rounded-2xl p-4 sm:p-8">
                 <h2 className="mb-6 text-xl font-semibold text-white">{config.contactPage.contactInfoHeading}</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
@@ -54,7 +54,7 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">{config.contactPage.emailLabel}</p>
-                      <a href={`mailto:${config.email}`} className="text-white hover:text-violet-400 transition-colors">{config.email}</a>
+                      <a href={`mailto:${config.email}`} className="link-underline break-all text-white transition-colors hover:text-violet-400">{config.email}</a>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -65,7 +65,7 @@ export default async function ContactPage() {
                     </div>
                     <div>
                       <p className="text-sm text-slate-500">{config.contactPage.phoneLabel}</p>
-                      <a href={`tel:${config.phone}`} className="text-white hover:text-violet-400 transition-colors">{config.phone}</a>
+                      <a href={`tel:${config.phone}`} className="link-underline break-all text-white transition-colors hover:text-violet-400">{config.phone}</a>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -93,7 +93,20 @@ export default async function ContactPage() {
                 </div>
               </div>
 
-              <div className="glass-card rounded-2xl p-8">
+              <div className="glass-card rounded-2xl p-4 sm:p-6">
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm text-slate-500">{config.contactPage.responseTimeLabel}</p>
+                    <p className="font-medium text-white">{config.contactPage.responseTime}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-500">{config.contactPage.timezoneLabel}</p>
+                    <p className="font-medium text-white">{config.contactPage.timezone}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="glass-card rounded-2xl p-4 sm:p-8">
                 <h2 className="mb-4 text-xl font-semibold text-white">{config.contactPage.connectHeading}</h2>
                 <div className="flex flex-wrap gap-3">
                   {config.socialLinks.map((social) => {

@@ -27,11 +27,11 @@ export function FAQ({ faqs }: FAQProps) {
           >
             <button
               type="button"
-              className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-colors"
+              className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left transition-colors sm:px-6 sm:py-5"
               onClick={() => setOpenIndex(isOpen ? null : index)}
               aria-expanded={isOpen}
             >
-              <span className={cn("font-medium transition-colors", isOpen ? "text-violet-200" : "text-white")}>
+              <span className={cn("min-w-0 flex-1 break-words pr-2 font-medium transition-colors", isOpen ? "text-violet-200" : "text-white")}>
                 {faq.question}
               </span>
               <span
@@ -54,7 +54,7 @@ export function FAQ({ faqs }: FAQProps) {
               )}
             >
               <div className="overflow-hidden">
-                <p className="px-6 pb-5 leading-relaxed text-slate-400">{faq.answer}</p>
+                <p className="px-4 pb-4 leading-relaxed text-slate-400 sm:px-6 sm:pb-5">{faq.answer}</p>
               </div>
             </div>
           </div>

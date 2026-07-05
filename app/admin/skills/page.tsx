@@ -10,6 +10,8 @@ import {
   adminCardClass,
   adminInputClass,
   adminLabelClass,
+  adminListRowClass,
+  adminToolbarClass,
 } from "@/components/admin/AdminUI";
 import { notify } from "@/lib/toast";
 
@@ -58,16 +60,16 @@ export default function AdminSkillsPage() {
 
   return (
     <>
-      <div className="mb-8 flex items-center justify-between">
-        <AdminPageHeader title="Skills" description="Manage skill categories and individual skills." />
-        <button onClick={() => setEditingCat({ category: "", description: "" })} className={adminBtnPrimary}>+ Add Category</button>
+      <div className={adminToolbarClass}>
+        <AdminPageHeader title="Skills" description="Manage skill categories and individual skills." className="mb-0" />
+        <button onClick={() => setEditingCat({ category: "", description: "" })} className={`${adminBtnPrimary} shrink-0 self-start`}>+ Add Category</button>
       </div>
 
       {editingCat && (
         <div className={`${adminCardClass} mb-6 space-y-4`}>
           <div><label className={adminLabelClass}>Category Name</label><input className={adminInputClass} value={editingCat.category} onChange={(e) => setEditingCat({ ...editingCat, category: e.target.value })} /></div>
           <div><label className={adminLabelClass}>Description</label><textarea className={adminInputClass} rows={2} value={editingCat.description} onChange={(e) => setEditingCat({ ...editingCat, description: e.target.value })} /></div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <button onClick={saveCategory} className={adminBtnPrimary}>Save</button>
             <button onClick={() => setEditingCat(null)} className={adminBtnSecondary}>Cancel</button>
           </div>
@@ -77,12 +79,12 @@ export default function AdminSkillsPage() {
       <div className="space-y-6">
         {categories.map((cat) => (
           <div key={cat.id} className={adminCardClass}>
-            <div className="mb-4 flex items-start justify-between">
-              <div>
+            <div className={`mb-4 ${adminListRowClass} items-start`}>
+              <div className="min-w-0">
                 <h3 className="font-semibold text-white">{cat.category}</h3>
                 <p className="text-sm text-slate-400">{cat.description}</p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex shrink-0 flex-wrap gap-2">
                 <button onClick={() => setEditingCat({ id: cat.id, category: cat.category, description: cat.description })} className={adminBtnSecondary}>Edit</button>
                 <button onClick={async () => { if (confirm("Delete category and all skills?")) { await fetch(`/api/admin/skills/categories/${cat.id}`, { method: "DELETE" }); load(); } }} className={adminBtnDanger}>Delete</button>
               </div>
@@ -96,10 +98,12 @@ export default function AdminSkillsPage() {
               ))}
             </div>
             {newSkill?.categoryId === cat.id ? (
-              <div className="mt-3 flex gap-2">
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
                 <input className={adminInputClass} placeholder="Skill name" value={newSkill.name} onChange={(e) => setNewSkill({ ...newSkill, name: e.target.value })} />
+                <div className="flex flex-wrap gap-2">
                 <button onClick={addSkill} className={adminBtnPrimary}>Add</button>
                 <button onClick={() => setNewSkill(null)} className={adminBtnSecondary}>Cancel</button>
+                </div>
               </div>
             ) : (
               <button onClick={() => setNewSkill({ categoryId: cat.id, name: "" })} className="mt-3 text-sm text-violet-400 hover:underline">+ Add skill</button>

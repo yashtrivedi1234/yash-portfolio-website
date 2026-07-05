@@ -29,6 +29,11 @@ export async function POST(request: Request) {
       featured: body.featured ?? false,
       liveUrl: body.liveUrl ?? "#",
       features: body.features ?? [],
+      problem: body.problem || null,
+      solution: body.solution || null,
+      result: body.result || null,
+      metrics: body.metrics ?? null,
+      gallery: body.gallery ?? [],
       sortOrder: count,
     },
   });

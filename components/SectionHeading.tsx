@@ -29,7 +29,7 @@ export function SectionHeading({
           {label}
         </span>
       )}
-      <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
+      <h2 className="text-2xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
         {title}
       </h2>
       <div

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLoading, AdminPageHeader, adminBtnDanger, adminCardClass } from "@/components/admin/AdminUI";
+import { AdminLoading, AdminPageHeader, adminBtnDanger, adminCardClass, adminListRowClass } from "@/components/admin/AdminUI";
 
 interface Message {
   id: string;
@@ -40,16 +40,18 @@ export default function AdminMessagesPage() {
         <div className="space-y-3">
           {messages.map((m) => (
             <div key={m.id} className={`${adminCardClass} ${!m.read ? "border-violet-500/30" : ""}`}>
-              <div className="mb-2 flex items-start justify-between">
-                <div>
-                  <h3 className="font-medium text-white">{m.subject}</h3>
-                  <p className="text-sm text-slate-400">{m.name} · {m.email} · {new Date(m.createdAt).toLocaleDateString()}</p>
+              <div className={`mb-2 ${adminListRowClass} items-start`}>
+                <div className="min-w-0">
+                  <h3 className="font-medium break-words text-white">{m.subject}</h3>
+                  <p className="break-all text-sm text-slate-400">
+                    {m.name} · {m.email} · {new Date(m.createdAt).toLocaleDateString()}
+                  </p>
                 </div>
                 {!m.read && (
-                  <button onClick={() => markRead(m.id)} className="text-xs text-violet-400 hover:underline">Mark read</button>
+                  <button onClick={() => markRead(m.id)} className="shrink-0 text-xs text-violet-400 hover:underline">Mark read</button>
                 )}
               </div>
-              <p className="text-sm text-slate-300">{m.message}</p>
+              <p className="break-words text-sm text-slate-300">{m.message}</p>
               <button onClick={async () => { if (confirm("Delete?")) { await fetch(`/api/admin/messages/${m.id}`, { method: "DELETE" }); load(); } }} className={`${adminBtnDanger} mt-3`}>Delete</button>
             </div>
           ))}

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
 import { JsonLd } from "@/components/JsonLd";
+import { ProjectCaseStudy } from "@/components/ProjectCaseStudy";
 import { getProjects, getProjectBySlug, getSiteConfig } from "@/lib/data";
 import { getBreadcrumbLabels } from "@/lib/breadcrumbs";
 import { createPageMetadata, createBreadcrumbSchema, createProjectSchema } from "@/lib/seo";
@@ -81,16 +82,16 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                 {project.year}
               </span>
             </div>
-            <h1 className="text-4xl font-bold text-white sm:text-5xl">{project.title}</h1>
-            <p className="mt-4 text-xl text-slate-400">{project.description}</p>
+            <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">{project.title}</h1>
+            <p className="mt-4 text-lg text-slate-400 sm:text-xl">{project.description}</p>
           </header>
 
-          <div className="relative mb-10 aspect-video overflow-hidden rounded-2xl border border-slate-800">
+          <div className="relative mb-10 aspect-video overflow-hidden rounded-2xl border border-slate-800 shadow-xl shadow-black/30">
             <Image
               src={project.image}
               alt={`${project.title} project screenshot`}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-500 hover:scale-[1.02]"
               priority
               sizes="(max-width: 896px) 100vw, 896px"
             />
@@ -104,6 +105,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               </svg>
             </Button>
           </div>
+
+          <ProjectCaseStudy project={project} labels={labels} />
 
           <div className="prose prose-invert max-w-none">
             <section className="mb-10">

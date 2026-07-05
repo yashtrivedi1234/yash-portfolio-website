@@ -75,6 +75,10 @@ export interface FullSiteConfig {
     phoneLabel: string;
     locationLabel: string;
     connectHeading: string;
+    responseTimeLabel: string;
+    responseTime: string;
+    timezoneLabel: string;
+    timezone: string;
     form: {
       nameLabel: string;
       emailLabel: string;
@@ -160,6 +164,21 @@ export interface FullSiteConfig {
     projectNotFound: string;
     projectMetaKeyword: string;
     lastUpdatedLabel: string;
+    problem: string;
+    solution: string;
+    result: string;
+    keyMetrics: string;
+    projectGallery: string;
+  };
+  aboutPage: {
+    currentlyLearningLabel: string;
+    focusLabel: string;
+    currentlyLearning: string[];
+    focusAreas: string[];
+  };
+  mobileHireBar: {
+    label: string;
+    href: string;
   };
   pageTitles: {
     homeSuffix: string;
@@ -322,6 +341,10 @@ export function getDefaultSiteConfig(): FullSiteConfig {
       phoneLabel: "Phone",
       locationLabel: "Location",
       connectHeading: "Connect With Me",
+      responseTimeLabel: "Response Time",
+      responseTime: "Usually replies within 24 hours",
+      timezoneLabel: "Timezone",
+      timezone: "IST (UTC+5:30) — Sitapur, India",
       form: {
         nameLabel: "Name",
         emailLabel: "Email",
@@ -493,6 +516,21 @@ export function getDefaultSiteConfig(): FullSiteConfig {
       projectNotFound: "Project Not Found",
       projectMetaKeyword: "Web Development Project",
       lastUpdatedLabel: "Last updated:",
+      problem: "Problem",
+      solution: "Solution",
+      result: "Result",
+      keyMetrics: "Key Metrics",
+      projectGallery: "Project Gallery",
+    },
+    aboutPage: {
+      currentlyLearningLabel: "Currently Learning",
+      focusLabel: "Focused On",
+      currentlyLearning: ["Next.js 16", "AI Agents", "System Design"],
+      focusAreas: ["Full-Stack Engineering", "AI Integration", "Scalable Architectures"],
+    },
+    mobileHireBar: {
+      label: "Available for hire — Let's talk",
+      href: "/contact",
     },
     pageTitles: {
       homeSuffix: "Full-Stack Developer Portfolio",
@@ -564,6 +602,8 @@ export function mergeSiteConfig(partial: Record<string, unknown> | null | undefi
     socialLinks: (partial.socialLinks as FullSiteConfig["socialLinks"]) ?? defaults.socialLinks,
     navLinks: (partial.navLinks as FullSiteConfig["navLinks"]) ?? defaults.navLinks,
     aboutSections: (partial.aboutSections as FullSiteConfig["aboutSections"]) ?? defaults.aboutSections,
+    aboutPage: { ...defaults.aboutPage, ...(partial.aboutPage as object) },
+    mobileHireBar: { ...defaults.mobileHireBar, ...(partial.mobileHireBar as object) },
     navbar: { ...defaults.navbar, ...(partial.navbar as object) },
     pageHeadings: { ...defaults.pageHeadings, ...(partial.pageHeadings as object) },
     experienceSections: (partial.experienceSections as FullSiteConfig["experienceSections"]) ?? defaults.experienceSections,

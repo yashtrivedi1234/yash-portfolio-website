@@ -22,13 +22,13 @@ export function ExperienceTimeline({ items, title }: ExperienceTimelineProps) {
       {title && (
         <h3 className="mb-8 text-2xl font-bold text-white">{title}</h3>
       )}
-      <div className="relative space-y-8 before:absolute before:top-2 before:left-[7px] before:h-[calc(100%-16px)] before:w-0.5 before:bg-gradient-to-b before:from-violet-500/50 before:via-slate-700 before:to-transparent md:before:left-[11px]">
+      <div className="relative space-y-8 before:absolute before:top-2 before:left-[7px] before:h-[calc(100%-16px)] before:w-1 before:rounded-full before:bg-gradient-to-b before:from-violet-500 before:via-violet-500/40 before:to-transparent md:before:left-[11px]">
         {items.map((item, index) => (
           <article key={index} className="group relative pl-8 md:pl-12">
             <div
               className={`absolute top-2 left-0 h-4 w-4 rounded-full border-4 border-slate-950 shadow-lg ${typeColors[item.type] ?? "bg-slate-500"}`}
             />
-            <div className="glass-card rounded-2xl p-6 transition-all duration-300 group-hover:border-violet-500/30 group-hover:shadow-lg group-hover:shadow-violet-500/5">
+            <div className="glass-card rounded-2xl p-4 transition-all duration-300 group-hover:border-violet-500/30 group-hover:shadow-lg group-hover:shadow-violet-500/5 sm:p-6">
               <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <h4 className="text-lg font-semibold text-white transition-colors group-hover:text-violet-300">

@@ -10,7 +10,7 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
     <a
       href={href}
       {...(isEmail ? {} : { target: "_blank", rel: "noopener noreferrer" })}
-      className="rounded-xl border border-transparent bg-slate-800/50 p-3 text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-500/30 hover:bg-violet-500/15 hover:text-violet-400 hover:shadow-lg hover:shadow-violet-500/10"
+      className="rounded-xl border border-transparent bg-slate-800/50 p-3 text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:border-violet-500/30 hover:bg-violet-500/15 hover:text-violet-400 hover:shadow-lg hover:shadow-violet-500/10"
       aria-label={label}
     >
       {children}
@@ -21,7 +21,7 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
 interface HeroProps {
   config: Pick<
     SiteConfig,
-    "name" | "role" | "shortBio" | "resumeLink" | "socialLinks" | "hero" | "buttons" | "heroCode"
+    "name" | "role" | "shortBio" | "resumeLink" | "socialLinks" | "hero" | "buttons" | "heroCode" | "availability" | "navbar"
   >;
 }
 
@@ -37,8 +37,25 @@ export function Hero({ config }: HeroProps) {
       </div>
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          <div className="order-2 lg:order-1">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
+          {/* Profile photo — centered on mobile */}
+          <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
+            <div className="animate-fade-in-up relative" style={{ animationDelay: "0.15s" }}>
+              <div className="absolute -inset-3 rounded-full bg-gradient-to-r from-violet-600/30 to-indigo-600/30 blur-xl lg:hidden" />
+              <div className="relative overflow-hidden rounded-full border-4 border-slate-800 shadow-2xl shadow-violet-500/20 lg:hidden">
+                <Image
+                  src={hero.profileImage}
+                  alt={`${config.name} - ${config.role}`}
+                  width={160}
+                  height={160}
+                  className="h-36 w-36 object-cover sm:h-40 sm:w-40"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="order-2 text-center lg:order-1 lg:text-left">
             <div
               className="animate-fade-in-up mb-6 inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm text-violet-400"
               style={{ animationDelay: "0.05s" }}
@@ -51,37 +68,37 @@ export function Hero({ config }: HeroProps) {
             </div>
 
             <h1
-              className="animate-fade-in-up text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl lg:leading-[1.1]"
+              className="animate-fade-in-up text-3xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl lg:leading-[1.08] lg:tracking-tighter"
               style={{ animationDelay: "0.15s" }}
             >
               {hero.greetingPrefix}{" "}
-              <span className="text-gradient">{config.name}</span>
+              <span className="font-display text-gradient">{config.name}</span>
               {hero.roleConnector}
               <span className="text-slate-300">{config.role}</span>{" "}
               <span className="text-slate-400">{hero.headlineSuffix}</span>
             </h1>
 
             <p
-              className="animate-fade-in-up mt-6 max-w-xl text-lg leading-relaxed text-slate-400 sm:text-xl"
+              className="animate-fade-in-up mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-400 sm:text-xl lg:mx-0"
               style={{ animationDelay: "0.25s" }}
             >
               {config.shortBio} {hero.extraBio}
             </p>
 
             <div
-              className="animate-fade-in-up mt-8 flex flex-wrap gap-3 sm:gap-4"
+              className="animate-fade-in-up mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4 lg:justify-start"
               style={{ animationDelay: "0.35s" }}
             >
-              <Button href="/projects" size="lg">
+              <Button href="/projects" size="lg" className="w-full sm:w-auto">
                 {config.buttons.viewMyWork}
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Button>
-              <Button href="/contact" variant="outline" size="lg">
+              <Button href="/contact" variant="outline" size="lg" className="w-full sm:w-auto">
                 {config.buttons.contactMe}
               </Button>
-              <Button href={config.resumeLink} variant="secondary" size="lg" external>
+              <Button href={config.resumeLink} variant="secondary" size="lg" external className="w-full sm:w-auto">
                 {config.buttons.downloadResume}
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -90,7 +107,7 @@ export function Hero({ config }: HeroProps) {
             </div>
 
             <div
-              className="animate-fade-in-up mt-10 flex items-center gap-3"
+              className="animate-fade-in-up mt-10 flex items-center justify-center gap-3 lg:justify-start"
               style={{ animationDelay: "0.45s" }}
             >
               {config.socialLinks.map((social) => (
@@ -101,7 +118,8 @@ export function Hero({ config }: HeroProps) {
             </div>
           </div>
 
-          <div className="order-1 animate-fade-in-up lg:order-2" style={{ animationDelay: "0.2s" }}>
+          {/* Code block — desktop only */}
+          <div className="order-3 hidden animate-fade-in-up lg:order-2 lg:block" style={{ animationDelay: "0.2s" }}>
             <div className="relative mx-auto max-w-md lg:max-w-none">
               <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-violet-600/25 to-indigo-600/25 blur-2xl" />
               <div className="glass-card relative overflow-hidden rounded-2xl shadow-2xl shadow-violet-500/5">
@@ -111,7 +129,7 @@ export function Hero({ config }: HeroProps) {
                   <div className="h-3 w-3 rounded-full bg-green-500/90" />
                   <span className="ml-2 font-mono text-xs text-slate-500">{hero.codeWindowTitle}</span>
                 </div>
-                <div className="animate-shimmer p-6 font-mono text-sm leading-relaxed">
+                <div className="animate-shimmer overflow-x-auto p-4 font-mono text-xs leading-relaxed sm:p-6 sm:text-sm">
                   <p><span className="text-violet-400">const</span> <span className="text-indigo-300">{config.heroCode.variableName}</span> = {"{"}</p>
                   <p className="pl-4"><span className="text-slate-400">name:</span> <span className="text-green-400">&quot;{config.name}&quot;</span>,</p>
                   <p className="pl-4"><span className="text-slate-400">role:</span> <span className="text-green-400">&quot;{config.role}&quot;</span>,</p>
@@ -120,7 +138,7 @@ export function Hero({ config }: HeroProps) {
                   <p>{"}"};</p>
                 </div>
               </div>
-              <div className="animate-float absolute -right-3 -bottom-3 overflow-hidden rounded-2xl border-4 border-slate-900 shadow-2xl shadow-violet-500/20 sm:-right-4 sm:-bottom-4">
+              <div className="animate-float absolute right-0 bottom-0 overflow-hidden rounded-2xl border-4 border-slate-900 shadow-2xl shadow-violet-500/20 sm:-right-3 sm:-bottom-3">
                 <Image
                   src={hero.profileImage}
                   alt={`${config.name} - ${config.role}`}

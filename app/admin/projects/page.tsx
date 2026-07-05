@@ -10,6 +10,8 @@ import {
   adminCardClass,
   adminInputClass,
   adminLabelClass,
+  adminListRowClass,
+  adminToolbarClass,
 } from "@/components/admin/AdminUI";
 import { FileUploadField } from "@/components/admin/FileUploadField";
 import { notify } from "@/lib/toast";
@@ -28,6 +30,11 @@ interface Project {
   featured: boolean;
   liveUrl: string;
   features: string[];
+  problem?: string | null;
+  solution?: string | null;
+  result?: string | null;
+  metrics?: { label: string; value: string }[] | null;
+  gallery?: string[];
 }
 
 const emptyProject = {
@@ -43,6 +50,11 @@ const emptyProject = {
   featured: false,
   liveUrl: "#",
   features: "",
+  problem: "",
+  solution: "",
+  result: "",
+  metrics: "",
+  gallery: "",
 };
 
 export default function AdminProjectsPage() {
@@ -68,6 +80,16 @@ export default function AdminProjectsPage() {
       ...editing,
       techStack: editing.techStack.split(",").map((s) => s.trim()).filter(Boolean),
       features: editing.features.split("\n").map((s) => s.trim()).filter(Boolean),
+      problem: editing.problem || null,
+      solution: editing.solution || null,
+      result: editing.result || null,
+      metrics: editing.metrics
+        ? editing.metrics.split("\n").map((line) => {
+            const [value, ...rest] = line.split("|");
+            return { value: value?.trim() ?? "", label: rest.join("|").trim() };
+          }).filter((m) => m.label && m.value)
+        : null,
+      gallery: editing.gallery.split("\n").map((s) => s.trim()).filter(Boolean),
     };
 
     const url = editing.id ? `/api/admin/projects/${editing.id}` : "/api/admin/projects";
@@ -98,9 +120,9 @@ export default function AdminProjectsPage() {
 
   return (
     <>
-      <div className="mb-8 flex items-center justify-between">
-        <AdminPageHeader title="Projects" description="Manage your portfolio projects." />
-        <button onClick={() => setEditing({ ...emptyProject })} className={adminBtnPrimary}>
+      <div className={adminToolbarClass}>
+        <AdminPageHeader title="Projects" description="Manage your portfolio projects." className="mb-0" />
+        <button onClick={() => setEditing({ ...emptyProject })} className={`${adminBtnPrimary} shrink-0 self-start`}>
           + Add Project
         </button>
       </div>
@@ -152,6 +174,28 @@ export default function AdminProjectsPage() {
             <label className={adminLabelClass}>Features (one per line)</label>
             <textarea className={adminInputClass} rows={3} value={editing.features} onChange={(e) => setEditing({ ...editing, features: e.target.value })} />
           </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div>
+              <label className={adminLabelClass}>Problem</label>
+              <textarea className={adminInputClass} rows={3} value={editing.problem} onChange={(e) => setEditing({ ...editing, problem: e.target.value })} />
+            </div>
+            <div>
+              <label className={adminLabelClass}>Solution</label>
+              <textarea className={adminInputClass} rows={3} value={editing.solution} onChange={(e) => setEditing({ ...editing, solution: e.target.value })} />
+            </div>
+            <div>
+              <label className={adminLabelClass}>Result</label>
+              <textarea className={adminInputClass} rows={3} value={editing.result} onChange={(e) => setEditing({ ...editing, result: e.target.value })} />
+            </div>
+          </div>
+          <div>
+            <label className={adminLabelClass}>Metrics (value|label per line, e.g. 99.9%|Uptime SLA)</label>
+            <textarea className={adminInputClass} rows={3} value={editing.metrics} onChange={(e) => setEditing({ ...editing, metrics: e.target.value })} />
+          </div>
+          <div>
+            <label className={adminLabelClass}>Gallery URLs (one per line)</label>
+            <textarea className={adminInputClass} rows={2} value={editing.gallery} onChange={(e) => setEditing({ ...editing, gallery: e.target.value })} />
+          </div>
           <FileUploadField
             label="Project Image"
             accept="image/jpeg,image/png,image/webp,image/svg+xml"
@@ -171,7 +215,7 @@ export default function AdminProjectsPage() {
             <input type="checkbox" checked={editing.featured} onChange={(e) => setEditing({ ...editing, featured: e.target.checked })} className="rounded" />
             Featured project
           </label>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <button onClick={handleSave} className={adminBtnPrimary}>Save</button>
             <button onClick={() => setEditing(null)} className={adminBtnSecondary}>Cancel</button>
           </div>
@@ -180,12 +224,12 @@ export default function AdminProjectsPage() {
 
       <div className="space-y-3">
         {projects.map((p) => (
-          <div key={p.id} className={`${adminCardClass} flex items-center justify-between gap-4`}>
-            <div>
+          <div key={p.id} className={`${adminCardClass} ${adminListRowClass} gap-4`}>
+            <div className="min-w-0">
               <h3 className="font-medium text-white">{p.title}</h3>
               <p className="text-sm text-slate-400">{p.category} · {p.year} · {p.status}{p.featured && " · Featured"}</p>
             </div>
-            <div className="flex shrink-0 gap-2">
+            <div className="flex shrink-0 flex-wrap gap-2">
               <button
                 onClick={() => setEditing({
                   id: p.id,
@@ -201,6 +245,11 @@ export default function AdminProjectsPage() {
                   featured: p.featured,
                   liveUrl: p.liveUrl,
                   features: p.features.join("\n"),
+                  problem: p.problem ?? "",
+                  solution: p.solution ?? "",
+                  result: p.result ?? "",
+                  metrics: (p.metrics ?? []).map((m) => `${m.value}|${m.label}`).join("\n"),
+                  gallery: (p.gallery ?? []).join("\n"),
                 })}
                 className={adminBtnSecondary}
               >

@@ -10,6 +10,8 @@ import {
   adminCardClass,
   adminInputClass,
   adminLabelClass,
+  adminListRowClass,
+  adminToolbarClass,
 } from "@/components/admin/AdminUI";
 import { notify } from "@/lib/toast";
 
@@ -46,9 +48,9 @@ export default function AdminTestimonialsPage() {
 
   return (
     <>
-      <div className="mb-8 flex items-center justify-between">
-        <AdminPageHeader title="Testimonials" description="Manage work highlights and testimonials." />
-        <button onClick={() => setEditing({ name: "", role: "", company: "", content: "", avatar: "/images/avatars/avatar-1.svg", rating: 5 })} className={adminBtnPrimary}>+ Add</button>
+      <div className={adminToolbarClass}>
+        <AdminPageHeader title="Testimonials" description="Manage work highlights and testimonials." className="mb-0" />
+        <button onClick={() => setEditing({ name: "", role: "", company: "", content: "", avatar: "/images/avatars/avatar-1.svg", rating: 5 })} className={`${adminBtnPrimary} shrink-0 self-start`}>+ Add</button>
       </div>
 
       {editing && (
@@ -58,7 +60,7 @@ export default function AdminTestimonialsPage() {
             <div><label className={adminLabelClass}>Role</label><input className={adminInputClass} value={editing.role} onChange={(e) => setEditing({ ...editing, role: e.target.value })} /></div>
           </div>
           <div><label className={adminLabelClass}>Content</label><textarea className={adminInputClass} rows={3} value={editing.content} onChange={(e) => setEditing({ ...editing, content: e.target.value })} /></div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <button onClick={handleSave} className={adminBtnPrimary}>Save</button>
             <button onClick={() => setEditing(null)} className={adminBtnSecondary}>Cancel</button>
           </div>
@@ -67,9 +69,9 @@ export default function AdminTestimonialsPage() {
 
       <div className="space-y-3">
         {testimonials.map((t) => (
-          <div key={t.id} className={`${adminCardClass} flex items-center justify-between`}>
-            <div><h3 className="font-medium text-white">{t.name}</h3><p className="text-sm text-slate-400 line-clamp-2">{t.content}</p></div>
-            <div className="flex gap-2">
+          <div key={t.id} className={`${adminCardClass} ${adminListRowClass}`}>
+            <div className="min-w-0"><h3 className="font-medium text-white">{t.name}</h3><p className="line-clamp-2 text-sm text-slate-400">{t.content}</p></div>
+            <div className="flex shrink-0 flex-wrap gap-2">
               <button onClick={() => setEditing({ id: t.id, name: t.name, role: t.role, company: t.company, content: t.content, avatar: t.avatar, rating: t.rating })} className={adminBtnSecondary}>Edit</button>
               <button onClick={async () => { if (confirm("Delete?")) { await fetch(`/api/admin/testimonials/${t.id}`, { method: "DELETE" }); load(); } }} className={adminBtnDanger}>Delete</button>
             </div>

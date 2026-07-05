@@ -9,6 +9,7 @@ import {
   adminBtnSecondary,
   adminCardClass,
   adminInputClass,
+  adminListRowClass,
 } from "@/components/admin/AdminUI";
 
 interface TechItem {
@@ -44,24 +45,26 @@ export default function AdminTechStackPage() {
     <>
       <AdminPageHeader title="Tech Stack Strip" description="Manage the scrolling tech stack on the home page." />
 
-      <div className={`${adminCardClass} mb-6 flex gap-3`}>
+      <div className={`${adminCardClass} mb-6 flex flex-col gap-3 sm:flex-row`}>
         <input className={adminInputClass} placeholder="e.g. Next.js" value={newName} onChange={(e) => setNewName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addItem()} />
-        <button onClick={addItem} className={adminBtnPrimary}>Add</button>
+        <button onClick={addItem} className={`${adminBtnPrimary} shrink-0`}>Add</button>
       </div>
 
       <div className="space-y-2">
         {items.map((item) => (
-          <div key={item.id} className={`${adminCardClass} flex items-center justify-between py-3`}>
+          <div key={item.id} className={`${adminCardClass} ${adminListRowClass} py-3`}>
             {editing?.id === item.id ? (
-              <div className="flex flex-1 gap-2">
+              <div className="flex w-full flex-col gap-2 sm:flex-row">
                 <input className={adminInputClass} value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} />
+                <div className="flex flex-wrap gap-2">
                 <button onClick={async () => { await fetch(`/api/admin/tech-stack/${item.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(editing) }); setEditing(null); load(); }} className={adminBtnPrimary}>Save</button>
                 <button onClick={() => setEditing(null)} className={adminBtnSecondary}>Cancel</button>
+                </div>
               </div>
             ) : (
               <>
-                <span className="text-white">{item.name}</span>
-                <div className="flex gap-2">
+                <span className="min-w-0 text-white">{item.name}</span>
+                <div className="flex shrink-0 flex-wrap gap-2">
                   <button onClick={() => setEditing({ id: item.id, name: item.name })} className={adminBtnSecondary}>Edit</button>
                   <button onClick={async () => { if (confirm("Delete?")) { await fetch(`/api/admin/tech-stack/${item.id}`, { method: "DELETE" }); load(); } }} className={adminBtnDanger}>Delete</button>
                 </div>

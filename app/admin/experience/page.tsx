@@ -10,6 +10,8 @@ import {
   adminCardClass,
   adminInputClass,
   adminLabelClass,
+  adminListRowClass,
+  adminToolbarClass,
 } from "@/components/admin/AdminUI";
 import { notify } from "@/lib/toast";
 
@@ -48,9 +50,9 @@ export default function AdminExperiencePage() {
 
   return (
     <>
-      <div className="mb-8 flex items-center justify-between">
-        <AdminPageHeader title="Experience" description="Manage work history, education, and certifications." />
-        <button onClick={() => setEditing({ title: "", organization: "", location: "", period: "", description: "", type: "work", technologies: "" })} className={adminBtnPrimary}>+ Add Entry</button>
+      <div className={adminToolbarClass}>
+        <AdminPageHeader title="Experience" description="Manage work history, education, and certifications." className="mb-0" />
+        <button onClick={() => setEditing({ title: "", organization: "", location: "", period: "", description: "", type: "work", technologies: "" })} className={`${adminBtnPrimary} shrink-0 self-start`}>+ Add Entry</button>
       </div>
 
       {editing && (
@@ -71,7 +73,7 @@ export default function AdminExperiencePage() {
             </div>
           </div>
           <div><label className={adminLabelClass}>Description</label><textarea className={adminInputClass} rows={3} value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} /></div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <button onClick={handleSave} className={adminBtnPrimary}>Save</button>
             <button onClick={() => setEditing(null)} className={adminBtnSecondary}>Cancel</button>
           </div>
@@ -80,9 +82,9 @@ export default function AdminExperiencePage() {
 
       <div className="space-y-3">
         {items.map((item) => (
-          <div key={item.id} className={`${adminCardClass} flex items-center justify-between`}>
-            <div><h3 className="font-medium text-white">{item.title}</h3><p className="text-sm text-slate-400">{item.organization} · {item.period} · {item.type}</p></div>
-            <div className="flex gap-2">
+          <div key={item.id} className={`${adminCardClass} ${adminListRowClass}`}>
+            <div className="min-w-0"><h3 className="font-medium text-white">{item.title}</h3><p className="text-sm text-slate-400">{item.organization} · {item.period} · {item.type}</p></div>
+            <div className="flex shrink-0 flex-wrap gap-2">
               <button onClick={() => setEditing({ id: item.id, title: item.title, organization: item.organization, location: item.location ?? "", period: item.period, description: item.description, type: item.type, technologies: item.technologies.join(", ") })} className={adminBtnSecondary}>Edit</button>
               <button onClick={async () => { if (confirm("Delete?")) { await fetch(`/api/admin/experience/${item.id}`, { method: "DELETE" }); load(); } }} className={adminBtnDanger}>Delete</button>
             </div>

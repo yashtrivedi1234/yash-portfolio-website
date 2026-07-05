@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import { getDefaultSiteConfig, mergeSiteConfig, type SiteConfig } from "@/lib/site-config";
-import { projects as staticProjects, type Project } from "@/data/projects";
+import { projects as staticProjects, type Project, type ProjectMetric } from "@/data/projects";
 import { services as staticServices, type Service } from "@/data/services";
 import { skillCategories as staticSkillCategories, techStackStrip as staticTechStack, type SkillCategory } from "@/data/skills";
 import { experienceItems as staticExperience, type ExperienceItem } from "@/data/experience";
@@ -51,6 +51,11 @@ export async function getProjects(): Promise<Project[]> {
       featured: p.featured,
       liveUrl: p.liveUrl,
       features: p.features,
+      problem: p.problem ?? undefined,
+      solution: p.solution ?? undefined,
+      result: p.result ?? undefined,
+      metrics: (p.metrics as unknown as ProjectMetric[] | null) ?? undefined,
+      gallery: (p.gallery?.length ?? 0) > 0 ? p.gallery : undefined,
     }));
   } catch {
     return staticProjects;

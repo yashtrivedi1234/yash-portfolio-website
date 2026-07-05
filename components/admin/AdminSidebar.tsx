@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
@@ -20,9 +21,11 @@ const navItems = [
 
 interface AdminSidebarProps {
   admin: { name: string; email: string; avatarUrl: string };
+  open: boolean;
+  onClose: () => void;
 }
 
-export function AdminSidebar({ admin }: AdminSidebarProps) {
+export function AdminSidebar({ admin, open, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -33,10 +36,25 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
   }
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-slate-800 bg-slate-950">
-      <div className="border-b border-slate-800 p-6">
-        <div className="flex items-center gap-3">
-          <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-violet-500/50">
+    <aside
+      className={cn(
+        "fixed inset-y-0 left-0 z-50 flex w-64 max-w-[85vw] flex-col border-r border-slate-800 bg-slate-950 transition-transform duration-300 lg:translate-x-0",
+        open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      )}
+    >
+      <div className="relative border-b border-slate-800 p-6">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-800 hover:text-white lg:hidden"
+          aria-label="Close admin menu"
+        >
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <div className="flex items-center gap-3 pr-8 lg:pr-0">
+          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border-2 border-violet-500/50">
             <Image src={admin.avatarUrl} alt={admin.name} fill className="object-cover" />
           </div>
           <div className="min-w-0">
@@ -53,11 +71,13 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+              onClick={onClose}
+              className={cn(
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                 active
                   ? "bg-violet-500/15 text-violet-400"
                   : "text-slate-400 hover:bg-slate-800/50 hover:text-white"
-              }`}
+              )}
             >
               <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
@@ -74,7 +94,7 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
           target="_blank"
           className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-slate-400 hover:bg-slate-800/50 hover:text-white"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
           View Website
@@ -83,7 +103,7 @@ export function AdminSidebar({ admin }: AdminSidebarProps) {
           onClick={handleLogout}
           className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-red-500/10"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>
           Logout

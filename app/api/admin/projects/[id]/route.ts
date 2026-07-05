@@ -25,6 +25,11 @@ export async function PUT(request: Request, { params }: Params) {
       featured: body.featured,
       liveUrl: body.liveUrl,
       features: body.features,
+      problem: body.problem || null,
+      solution: body.solution || null,
+      result: body.result || null,
+      metrics: body.metrics ?? null,
+      gallery: body.gallery ?? [],
       sortOrder: body.sortOrder,
     },
   });

@@ -3,10 +3,12 @@ import Link from "next/link";
 import type { Project } from "@/data/projects";
 import type { SiteConfig } from "@/lib/site-config";
 import { Button } from "@/components/Button";
+import { cn } from "@/lib/utils";
 
 interface ProjectCardProps {
   project: Project;
   labels: SiteConfig["labels"];
+  featured?: boolean;
 }
 
 const statusColors: Record<string, string> = {
@@ -15,16 +17,16 @@ const statusColors: Record<string, string> = {
   Featured: "bg-violet-500/10 text-violet-400 border-violet-500/30",
 };
 
-export function ProjectCard({ project, labels }: ProjectCardProps) {
+export function ProjectCard({ project, labels, featured = false }: ProjectCardProps) {
   return (
     <article className="group glass-card card-hover flex h-full flex-col overflow-hidden rounded-2xl">
-      <Link href={`/projects/${project.slug}`} className="relative block aspect-video overflow-hidden">
+      <Link href={`/projects/${project.slug}`} className="relative block aspect-video overflow-hidden border-b border-slate-800/80 shadow-inner shadow-black/20">
         <Image
           src={project.image}
           alt={`${project.title} - ${project.category}`}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes={featured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-80" />
         <div className="absolute top-4 left-4 flex flex-wrap gap-2">
@@ -40,7 +42,7 @@ export function ProjectCard({ project, labels }: ProjectCardProps) {
       <div className="flex flex-1 flex-col p-6">
         <div className="mb-2 flex items-start justify-between gap-3">
           <Link href={`/projects/${project.slug}`}>
-            <h3 className="text-xl font-semibold text-white transition-colors group-hover:text-violet-400">
+            <h3 className={cn("font-semibold text-white transition-colors group-hover:text-violet-400", featured ? "text-2xl" : "text-xl")}>
               {project.title}
             </h3>
           </Link>

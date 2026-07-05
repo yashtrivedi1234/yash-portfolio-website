@@ -37,6 +37,11 @@ model Project {
   liveUrl         String
   githubUrl       String?
   features        String[]
+  problem         String?  @db.Text
+  solution        String?  @db.Text
+  result          String?  @db.Text
+  metrics         Json?
+  gallery         String[]
   sortOrder       Int      @default(0)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

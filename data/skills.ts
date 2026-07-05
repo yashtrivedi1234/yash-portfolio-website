@@ -85,15 +85,20 @@ export const skillCategories: SkillCategory[] = [
   },
 ];
 
-export const techStackStrip = [
-  "Next.js",
-  "React",
-  "TypeScript",
-  "Node.js",
-  "MongoDB",
-  "PostgreSQL",
-  "Tailwind CSS",
-  "LangChain",
-  "Cloudflare",
-  "Prisma",
+export interface TechStackMarqueeItem {
+  name: string;
+  logo?: string;
+}
+
+export const techStackStrip: TechStackMarqueeItem[] = [
+  { name: "Next.js" },
+  { name: "React" },
+  { name: "TypeScript" },
+  { name: "Node.js" },
+  { name: "MongoDB" },
+  { name: "PostgreSQL" },
+  { name: "Tailwind CSS" },
+  { name: "LangChain" },
+  { name: "Cloudflare" },
+  { name: "Prisma" },
 ];

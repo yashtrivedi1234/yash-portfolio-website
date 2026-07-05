@@ -104,9 +104,10 @@ model Faq {
 }
 
 model TechStackItem {
-  id        String @id @default(cuid())
+  id        String  @id @default(cuid())
   name      String
-  sortOrder Int    @default(0)
+  logo      String?
+  sortOrder Int     @default(0)
 }
 
 model ContactMessage {

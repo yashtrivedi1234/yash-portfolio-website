@@ -13,6 +13,7 @@ import {
   adminListRowClass,
   adminToolbarClass,
 } from "@/components/admin/AdminUI";
+import { ValidatedInput, ValidatedTextarea } from "@/components/ValidatedField";
 import { notify } from "@/lib/toast";
 
 interface Experience {
@@ -58,9 +59,9 @@ export default function AdminExperiencePage() {
       {editing && (
         <div className={`${adminCardClass} mb-6 space-y-4`}>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div><label className={adminLabelClass}>Title</label><input className={adminInputClass} value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} /></div>
-            <div><label className={adminLabelClass}>Organization</label><input className={adminInputClass} value={editing.organization} onChange={(e) => setEditing({ ...editing, organization: e.target.value })} /></div>
-            <div><label className={adminLabelClass}>Period</label><input className={adminInputClass} value={editing.period} onChange={(e) => setEditing({ ...editing, period: e.target.value })} /></div>
+            <div><label className={adminLabelClass}>Title</label><ValidatedInput fieldType="title" className={adminInputClass} value={editing.title} onValueChange={(title) => setEditing({ ...editing, title })} /></div>
+            <div><label className={adminLabelClass}>Organization</label><ValidatedInput fieldType="shortText" className={adminInputClass} value={editing.organization} onValueChange={(organization) => setEditing({ ...editing, organization })} /></div>
+            <div><label className={adminLabelClass}>Period</label><ValidatedInput fieldType="shortText" className={adminInputClass} value={editing.period} onValueChange={(period) => setEditing({ ...editing, period })} /></div>
             <div>
               <label className={adminLabelClass}>Type</label>
               <select className={adminInputClass} value={editing.type} onChange={(e) => setEditing({ ...editing, type: e.target.value })}>
@@ -72,7 +73,7 @@ export default function AdminExperiencePage() {
               </select>
             </div>
           </div>
-          <div><label className={adminLabelClass}>Description</label><textarea className={adminInputClass} rows={3} value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} /></div>
+          <div><label className={adminLabelClass}>Description</label><ValidatedTextarea fieldType="longText" className={adminInputClass} rows={3} value={editing.description} onValueChange={(description) => setEditing({ ...editing, description })} /></div>
           <div className="flex flex-wrap gap-3">
             <button onClick={handleSave} className={adminBtnPrimary}>Save</button>
             <button onClick={() => setEditing(null)} className={adminBtnSecondary}>Cancel</button>

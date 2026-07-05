@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAdminApi } from "@/lib/admin-api";
 import { mergeSiteConfig } from "@/lib/site-config";
+import { sanitizeDeepConfig } from "@/lib/sanitize-api";
 
 export async function GET() {
   const { error } = await requireAdminApi();
@@ -16,7 +17,7 @@ export async function PUT(request: Request) {
   const { error } = await requireAdminApi();
   if (error) return error;
 
-  const data = await request.json();
+  const data = sanitizeDeepConfig(await request.json());
   const settings = await prisma.siteSettings.upsert({
     where: { id: "default" },
     update: { data },

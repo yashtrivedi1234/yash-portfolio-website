@@ -16,6 +16,7 @@ const UPLOAD_FOLDERS: Record<string, string> = {
   project: "projects",
   "admin-avatar": "admin",
   favicon: "favicon",
+  "tech-stack": "tech-stack",
 };
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;

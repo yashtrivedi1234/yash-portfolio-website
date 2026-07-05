@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAdminApi } from "@/lib/admin-api";
+import { sanitizeServicePayload } from "@/lib/sanitize-api";
 
 export async function GET() {
   const { error } = await requireAdminApi();
@@ -13,14 +14,14 @@ export async function POST(request: Request) {
   const { error } = await requireAdminApi();
   if (error) return error;
 
-  const body = await request.json();
+  const body = sanitizeServicePayload(await request.json());
   const count = await prisma.service.count();
   const service = await prisma.service.create({
     data: {
       title: body.title,
       description: body.description,
-      icon: body.icon ?? "globe",
-      benefits: body.benefits ?? [],
+      icon: body.icon,
+      benefits: body.benefits,
       sortOrder: count,
     },
   });

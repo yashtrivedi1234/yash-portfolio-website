@@ -1,6 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { ValidatedInput, ValidatedTextarea } from "@/components/ValidatedField";
+import { type InputFieldType } from "@/lib/character-rules";
 
 interface Tab {
   id: string;
@@ -36,6 +38,20 @@ export function AdminTabs({
   );
 }
 
+const DEFAULT_FIELD_TYPES: Record<string, InputFieldType> = {
+  name: "personName",
+  href: "path",
+  value: "metricLine",
+  label: "shortText",
+  icon: "iconKey",
+  key: "iconKey",
+  title: "title",
+  content: "longText",
+};
+
+const inputClassName =
+  "w-full rounded-lg border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-white";
+
 export function ListEditor({
   items,
   onChange,
@@ -43,8 +59,12 @@ export function ListEditor({
 }: {
   items: Record<string, string>[];
   onChange: (items: Record<string, string>[]) => void;
-  fields: { key: string; label: string; type?: "text" | "textarea" }[];
+  fields: { key: string; label: string; type?: "text" | "textarea"; fieldType?: InputFieldType }[];
 }) {
+  function resolveFieldType(field: (typeof fields)[number]): InputFieldType {
+    return field.fieldType ?? DEFAULT_FIELD_TYPES[field.key] ?? (field.type === "textarea" ? "longText" : "shortText");
+  }
+
   return (
     <div className="space-y-4">
       {items.map((item, i) => (
@@ -53,23 +73,25 @@ export function ListEditor({
             <div key={f.key}>
               <label className="mb-1 block text-xs font-medium text-slate-400">{f.label}</label>
               {f.type === "textarea" ? (
-                <textarea
-                  className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-white"
+                <ValidatedTextarea
+                  fieldType={resolveFieldType(f)}
+                  className={inputClassName}
                   rows={3}
                   value={item[f.key] ?? ""}
-                  onChange={(e) => {
+                  onValueChange={(value) => {
                     const next = [...items];
-                    next[i] = { ...next[i], [f.key]: e.target.value };
+                    next[i] = { ...next[i], [f.key]: value };
                     onChange(next);
                   }}
                 />
               ) : (
-                <input
-                  className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-white"
+                <ValidatedInput
+                  fieldType={resolveFieldType(f)}
+                  className={inputClassName}
                   value={item[f.key] ?? ""}
-                  onChange={(e) => {
+                  onValueChange={(value) => {
                     const next = [...items];
-                    next[i] = { ...next[i], [f.key]: e.target.value };
+                    next[i] = { ...next[i], [f.key]: value };
                     onChange(next);
                   }}
                 />

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { getDefaultSiteConfig, mergeSiteConfig, type SiteConfig } from "@/lib/site-config";
 import { projects as staticProjects, type Project, type ProjectMetric } from "@/data/projects";
 import { services as staticServices, type Service } from "@/data/services";
-import { skillCategories as staticSkillCategories, techStackStrip as staticTechStack, type SkillCategory } from "@/data/skills";
+import { skillCategories as staticSkillCategories, techStackStrip as staticTechStack, type SkillCategory, type TechStackMarqueeItem } from "@/data/skills";
 import { experienceItems as staticExperience, type ExperienceItem } from "@/data/experience";
 import { testimonials as staticTestimonials, type Testimonial } from "@/data/testimonials";
 import { faqs as staticFaqs, type FAQ } from "@/data/faqs";
@@ -110,15 +110,18 @@ async function loadSkillCategories(): Promise<SkillCategory[]> {
   }
 }
 
-async function loadTechStackStrip(): Promise<string[]> {
-  if (!(await isDbConnected())) return [...staticTechStack];
+async function loadTechStackStrip(): Promise<TechStackMarqueeItem[]> {
+  if (!(await isDbConnected())) return staticTechStack.map((item) => ({ ...item }));
 
   try {
     const rows = await prisma.techStackItem.findMany({ orderBy: { sortOrder: "asc" } });
-    if (rows.length === 0) return [...staticTechStack];
-    return rows.map((t) => t.name);
+    if (rows.length === 0) return staticTechStack.map((item) => ({ ...item }));
+    return rows.map((t) => ({
+      name: t.name,
+      logo: t.logo ?? undefined,
+    }));
   } catch {
-    return [...staticTechStack];
+    return staticTechStack.map((item) => ({ ...item }));
   }
 }
 

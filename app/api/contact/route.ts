@@ -1,25 +1,24 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendContactAutoReply, sendContactNotification } from "@/lib/email";
+import { sanitizeContactPayload } from "@/lib/sanitize-api";
 
 export async function POST(request: Request) {
   try {
-    const { name, email, subject, message } = await request.json();
-
-    if (!name || !email || !subject || !message) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    const body = await request.json();
+    let payload;
+    try {
+      payload = sanitizeContactPayload(body);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Invalid input";
+      return NextResponse.json({ error: message }, { status: 400 });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
-    }
+    const { name, email, subject, message } = payload;
 
     await prisma.contactMessage.create({
       data: { name, email, subject, message },
     });
-
-    const payload = { name, email, subject, message };
 
     try {
       await Promise.all([

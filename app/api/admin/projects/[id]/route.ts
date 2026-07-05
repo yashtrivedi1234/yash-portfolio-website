@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAdminApi } from "@/lib/admin-api";
+import { sanitizeProjectPayload } from "@/lib/sanitize-api";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -9,7 +10,7 @@ export async function PUT(request: Request, { params }: Params) {
   if (error) return error;
 
   const { id } = await params;
-  const body = await request.json();
+  const body = sanitizeProjectPayload(await request.json());
   const project = await prisma.project.update({
     where: { id },
     data: {
@@ -25,11 +26,11 @@ export async function PUT(request: Request, { params }: Params) {
       featured: body.featured,
       liveUrl: body.liveUrl,
       features: body.features,
-      problem: body.problem || null,
-      solution: body.solution || null,
-      result: body.result || null,
-      metrics: body.metrics ?? null,
-      gallery: body.gallery ?? [],
+      problem: body.problem,
+      solution: body.solution,
+      result: body.result,
+      metrics: body.metrics ?? undefined,
+      gallery: body.gallery,
       sortOrder: body.sortOrder,
     },
   });

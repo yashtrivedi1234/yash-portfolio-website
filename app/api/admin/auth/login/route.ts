@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { createSession, verifyPassword } from "@/lib/auth";
+import { sanitizeLoginPayload } from "@/lib/sanitize-api";
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { email, password } = sanitizeLoginPayload(await request.json());
 
     if (!email || !password) {
       return NextResponse.json({ error: "Email and password required" }, { status: 400 });

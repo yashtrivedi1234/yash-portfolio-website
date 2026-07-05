@@ -14,6 +14,7 @@ import {
   adminToolbarClass,
 } from "@/components/admin/AdminUI";
 import { FileUploadField } from "@/components/admin/FileUploadField";
+import { ValidatedInput, ValidatedTextarea } from "@/components/ValidatedField";
 import { notify } from "@/lib/toast";
 import { slugify } from "@/lib/utils";
 
@@ -182,14 +183,15 @@ export default function AdminProjectsPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className={adminLabelClass}>Title</label>
-              <input className={adminInputClass} value={editing.title} onChange={(e) => handleTitleChange(e.target.value)} />
+              <ValidatedInput fieldType="title" className={adminInputClass} value={editing.title} onValueChange={handleTitleChange} />
             </div>
             <div>
               <label className={adminLabelClass}>Slug</label>
-              <input
+              <ValidatedInput
+                fieldType="slug"
                 className={adminInputClass}
                 value={editing.slug}
-                onChange={(e) => handleSlugChange(e.target.value)}
+                onValueChange={handleSlugChange}
                 placeholder="Auto-generated from title"
               />
               {!slugManual && editing.title && (
@@ -199,20 +201,20 @@ export default function AdminProjectsPage() {
           </div>
           <div>
             <label className={adminLabelClass}>Description</label>
-            <textarea className={adminInputClass} rows={2} value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
+            <ValidatedTextarea fieldType="longText" className={adminInputClass} rows={2} value={editing.description} onValueChange={(description) => setEditing({ ...editing, description })} />
           </div>
           <div>
             <label className={adminLabelClass}>Long Description</label>
-            <textarea className={adminInputClass} rows={3} value={editing.longDescription} onChange={(e) => setEditing({ ...editing, longDescription: e.target.value })} />
+            <ValidatedTextarea fieldType="longText" className={adminInputClass} rows={3} value={editing.longDescription} onValueChange={(longDescription) => setEditing({ ...editing, longDescription })} />
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <label className={adminLabelClass}>Category</label>
-              <input className={adminInputClass} value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })} />
+              <ValidatedInput fieldType="shortText" className={adminInputClass} value={editing.category} onValueChange={(category) => setEditing({ ...editing, category })} />
             </div>
             <div>
               <label className={adminLabelClass}>Year</label>
-              <input className={adminInputClass} value={editing.year} onChange={(e) => setEditing({ ...editing, year: e.target.value })} />
+              <ValidatedInput fieldType="year" className={adminInputClass} value={editing.year} onValueChange={(year) => setEditing({ ...editing, year })} />
             </div>
             <div>
               <label className={adminLabelClass}>Status</label>
@@ -225,33 +227,33 @@ export default function AdminProjectsPage() {
           </div>
           <div>
             <label className={adminLabelClass}>Tech Stack (comma separated)</label>
-            <input className={adminInputClass} value={editing.techStack} onChange={(e) => setEditing({ ...editing, techStack: e.target.value })} />
+            <ValidatedInput fieldType="techStack" className={adminInputClass} value={editing.techStack} onValueChange={(techStack) => setEditing({ ...editing, techStack })} />
           </div>
           <div>
             <label className={adminLabelClass}>Features (one per line)</label>
-            <textarea className={adminInputClass} rows={3} value={editing.features} onChange={(e) => setEditing({ ...editing, features: e.target.value })} />
+            <ValidatedTextarea fieldType="longText" className={adminInputClass} rows={3} value={editing.features} onValueChange={(features) => setEditing({ ...editing, features })} />
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <label className={adminLabelClass}>Problem</label>
-              <textarea className={adminInputClass} rows={3} value={editing.problem} onChange={(e) => setEditing({ ...editing, problem: e.target.value })} />
+              <ValidatedTextarea fieldType="longText" className={adminInputClass} rows={3} value={editing.problem} onValueChange={(problem) => setEditing({ ...editing, problem })} />
             </div>
             <div>
               <label className={adminLabelClass}>Solution</label>
-              <textarea className={adminInputClass} rows={3} value={editing.solution} onChange={(e) => setEditing({ ...editing, solution: e.target.value })} />
+              <ValidatedTextarea fieldType="longText" className={adminInputClass} rows={3} value={editing.solution} onValueChange={(solution) => setEditing({ ...editing, solution })} />
             </div>
             <div>
               <label className={adminLabelClass}>Result</label>
-              <textarea className={adminInputClass} rows={3} value={editing.result} onChange={(e) => setEditing({ ...editing, result: e.target.value })} />
+              <ValidatedTextarea fieldType="longText" className={adminInputClass} rows={3} value={editing.result} onValueChange={(result) => setEditing({ ...editing, result })} />
             </div>
           </div>
           <div>
             <label className={adminLabelClass}>Metrics (value|label per line, e.g. 99.9%|Uptime SLA)</label>
-            <textarea className={adminInputClass} rows={3} value={editing.metrics} onChange={(e) => setEditing({ ...editing, metrics: e.target.value })} />
+            <ValidatedTextarea fieldType="metricsBlock" className={adminInputClass} rows={3} value={editing.metrics} onValueChange={(metrics) => setEditing({ ...editing, metrics })} />
           </div>
           <div>
             <label className={adminLabelClass}>Gallery URLs (one per line)</label>
-            <textarea className={adminInputClass} rows={2} value={editing.gallery} onChange={(e) => setEditing({ ...editing, gallery: e.target.value })} />
+            <ValidatedTextarea fieldType="urlList" className={adminInputClass} rows={2} value={editing.gallery} onValueChange={(gallery) => setEditing({ ...editing, gallery })} />
           </div>
           <FileUploadField
             label="Project Image"
@@ -262,11 +264,11 @@ export default function AdminProjectsPage() {
           />
           <div>
             <label className={adminLabelClass}>Image Path</label>
-            <input className={adminInputClass} value={editing.image} onChange={(e) => setEditing({ ...editing, image: e.target.value })} />
+            <ValidatedInput fieldType="url" className={adminInputClass} value={editing.image} onValueChange={(image) => setEditing({ ...editing, image })} />
           </div>
           <div>
             <label className={adminLabelClass}>Live URL</label>
-            <input className={adminInputClass} value={editing.liveUrl} onChange={(e) => setEditing({ ...editing, liveUrl: e.target.value })} />
+            <ValidatedInput fieldType="url" className={adminInputClass} value={editing.liveUrl} onValueChange={(liveUrl) => setEditing({ ...editing, liveUrl })} />
           </div>
           <label className="flex items-center gap-2 text-sm text-slate-300">
             <input type="checkbox" checked={editing.featured} onChange={(e) => setEditing({ ...editing, featured: e.target.checked })} className="rounded" />

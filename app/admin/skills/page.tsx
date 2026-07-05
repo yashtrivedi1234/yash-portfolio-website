@@ -13,6 +13,7 @@ import {
   adminListRowClass,
   adminToolbarClass,
 } from "@/components/admin/AdminUI";
+import { ValidatedInput, ValidatedTextarea } from "@/components/ValidatedField";
 import { notify } from "@/lib/toast";
 
 interface Skill {
@@ -67,8 +68,8 @@ export default function AdminSkillsPage() {
 
       {editingCat && (
         <div className={`${adminCardClass} mb-6 space-y-4`}>
-          <div><label className={adminLabelClass}>Category Name</label><input className={adminInputClass} value={editingCat.category} onChange={(e) => setEditingCat({ ...editingCat, category: e.target.value })} /></div>
-          <div><label className={adminLabelClass}>Description</label><textarea className={adminInputClass} rows={2} value={editingCat.description} onChange={(e) => setEditingCat({ ...editingCat, description: e.target.value })} /></div>
+          <div><label className={adminLabelClass}>Category Name</label><ValidatedInput fieldType="shortText" className={adminInputClass} value={editingCat.category} onValueChange={(category) => setEditingCat({ ...editingCat, category })} /></div>
+          <div><label className={adminLabelClass}>Description</label><ValidatedTextarea fieldType="longText" className={adminInputClass} rows={2} value={editingCat.description} onValueChange={(description) => setEditingCat({ ...editingCat, description })} /></div>
           <div className="flex flex-wrap gap-3">
             <button onClick={saveCategory} className={adminBtnPrimary}>Save</button>
             <button onClick={() => setEditingCat(null)} className={adminBtnSecondary}>Cancel</button>
@@ -99,7 +100,7 @@ export default function AdminSkillsPage() {
             </div>
             {newSkill?.categoryId === cat.id ? (
               <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-                <input className={adminInputClass} placeholder="Skill name" value={newSkill.name} onChange={(e) => setNewSkill({ ...newSkill, name: e.target.value })} />
+                <ValidatedInput fieldType="techName" className={adminInputClass} placeholder="Skill name" value={newSkill.name} onValueChange={(name) => setNewSkill({ ...newSkill, name })} />
                 <div className="flex flex-wrap gap-2">
                 <button onClick={addSkill} className={adminBtnPrimary}>Add</button>
                 <button onClick={() => setNewSkill(null)} className={adminBtnSecondary}>Cancel</button>

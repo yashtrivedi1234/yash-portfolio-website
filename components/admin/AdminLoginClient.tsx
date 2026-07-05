@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { SiteConfig } from "@/lib/site-config";
 import { notify } from "@/lib/toast";
+import { ValidatedInput } from "@/components/ValidatedField";
 
 interface AdminLoginClientProps {
   login: SiteConfig["adminLogin"];
@@ -58,11 +59,12 @@ export function AdminLoginClient({ login, avatarUrl, name }: AdminLoginClientPro
             <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-300">
               {login.emailLabel}
             </label>
-            <input
+            <ValidatedInput
+              fieldType="email"
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onValueChange={setEmail}
               required
               className="input-field"
               placeholder={login.emailPlaceholder}
@@ -73,11 +75,12 @@ export function AdminLoginClient({ login, avatarUrl, name }: AdminLoginClientPro
             <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-300">
               {login.passwordLabel}
             </label>
-            <input
+            <ValidatedInput
+              fieldType="password"
               id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onValueChange={setPassword}
               required
               className="input-field"
               placeholder={login.passwordPlaceholder}

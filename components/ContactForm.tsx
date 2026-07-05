@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/Button";
+import { ValidatedInput, ValidatedTextarea } from "@/components/ValidatedField";
 import type { SiteConfig } from "@/lib/site-config";
 import { notify } from "@/lib/toast";
 
@@ -11,29 +12,28 @@ interface ContactFormProps {
 
 export function ContactForm({ form }: ContactFormProps) {
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
 
-    const formEl = e.target as HTMLFormElement;
-    const formData = new FormData(formEl);
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.get("name"),
-          email: formData.get("email"),
-          subject: formData.get("subject"),
-          message: formData.get("message"),
-        }),
+        body: JSON.stringify({ name, email, subject, message }),
       });
 
       if (!res.ok) throw new Error("Failed");
       notify.success(form.successMessage);
-      formEl.reset();
+      setName("");
+      setEmail("");
+      setSubject("");
+      setMessage("");
     } catch {
       notify.error(form.errorMessage);
     } finally {
@@ -48,13 +48,32 @@ export function ContactForm({ form }: ContactFormProps) {
           <label htmlFor="name" className="mb-2 block text-sm font-medium text-slate-300">
             {form.nameLabel}
           </label>
-          <input type="text" id="name" name="name" required className="input-field" placeholder={form.namePlaceholder} />
+          <ValidatedInput
+            fieldType="personName"
+            id="name"
+            name="name"
+            required
+            className="input-field"
+            placeholder={form.namePlaceholder}
+            value={name}
+            onValueChange={setName}
+          />
         </div>
         <div>
           <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-300">
             {form.emailLabel}
           </label>
-          <input type="email" id="email" name="email" required className="input-field" placeholder={form.emailPlaceholder} />
+          <ValidatedInput
+            fieldType="email"
+            id="email"
+            name="email"
+            type="email"
+            required
+            className="input-field"
+            placeholder={form.emailPlaceholder}
+            value={email}
+            onValueChange={setEmail}
+          />
         </div>
       </div>
 
@@ -62,20 +81,32 @@ export function ContactForm({ form }: ContactFormProps) {
         <label htmlFor="subject" className="mb-2 block text-sm font-medium text-slate-300">
           {form.subjectLabel}
         </label>
-        <input type="text" id="subject" name="subject" required className="input-field" placeholder={form.subjectPlaceholder} />
+        <ValidatedInput
+          fieldType="shortText"
+          id="subject"
+          name="subject"
+          required
+          className="input-field"
+          placeholder={form.subjectPlaceholder}
+          value={subject}
+          onValueChange={setSubject}
+        />
       </div>
 
       <div>
         <label htmlFor="message" className="mb-2 block text-sm font-medium text-slate-300">
           {form.messageLabel}
         </label>
-        <textarea
+        <ValidatedTextarea
+          fieldType="longText"
           id="message"
           name="message"
           required
           rows={5}
           className="input-field resize-none"
           placeholder={form.messagePlaceholder}
+          value={message}
+          onValueChange={setMessage}
         />
       </div>
 

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAdminApi } from "@/lib/admin-api";
+import { sanitizeInput } from "@/lib/character-rules";
+import { sanitizeSkillCategoryPayload } from "@/lib/sanitize-api";
 
 export async function GET() {
   const { error } = await requireAdminApi();
@@ -17,17 +19,18 @@ export async function POST(request: Request) {
   const { error } = await requireAdminApi();
   if (error) return error;
 
-  const body = await request.json();
+  const raw = await request.json();
+  const body = sanitizeSkillCategoryPayload(raw);
   const count = await prisma.skillCategory.count();
   const category = await prisma.skillCategory.create({
     data: {
       category: body.category,
-      description: body.description ?? "",
+      description: body.description,
       sortOrder: count,
-      skills: body.skills?.length
+      skills: raw.skills?.length
         ? {
-            create: body.skills.map((s: { name: string }, i: number) => ({
-              name: s.name,
+            create: raw.skills.map((s: { name: string }, i: number) => ({
+              name: sanitizeInput("techName", String(s.name)),
               level: 0,
               sortOrder: i,
             })),

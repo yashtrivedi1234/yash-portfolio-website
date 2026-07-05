@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAdminApi } from "@/lib/admin-api";
+import { sanitizeSkillCategoryPayload } from "@/lib/sanitize-api";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -9,7 +10,7 @@ export async function PUT(request: Request, { params }: Params) {
   if (error) return error;
 
   const { id } = await params;
-  const body = await request.json();
+  const body = sanitizeSkillCategoryPayload(await request.json());
   const category = await prisma.skillCategory.update({
     where: { id },
     data: { category: body.category, description: body.description, sortOrder: body.sortOrder },

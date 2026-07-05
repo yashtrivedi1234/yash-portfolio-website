@@ -9,6 +9,7 @@ import {
   adminLabelClass,
 } from "@/components/admin/AdminUI";
 import { FileUploadField } from "@/components/admin/FileUploadField";
+import { ValidatedInput } from "@/components/ValidatedField";
 import { notify } from "@/lib/toast";
 
 export default function AdminAccountPage() {
@@ -46,9 +47,9 @@ export default function AdminAccountPage() {
 
       <div className={`${adminCardClass} mb-6 space-y-4`}>
         <h3 className="font-semibold text-white">Change Password</h3>
-        <div><label className={adminLabelClass}>Current Password</label><input type="password" className={adminInputClass} value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} /></div>
-        <div><label className={adminLabelClass}>New Password</label><input type="password" className={adminInputClass} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} /></div>
-        <div><label className={adminLabelClass}>Confirm New Password</label><input type="password" className={adminInputClass} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} /></div>
+        <div><label className={adminLabelClass}>Current Password</label><ValidatedInput fieldType="password" type="password" className={adminInputClass} value={currentPassword} onValueChange={setCurrentPassword} /></div>
+        <div><label className={adminLabelClass}>New Password</label><ValidatedInput fieldType="password" type="password" className={adminInputClass} value={newPassword} onValueChange={setNewPassword} /></div>
+        <div><label className={adminLabelClass}>Confirm New Password</label><ValidatedInput fieldType="password" type="password" className={adminInputClass} value={confirmPassword} onValueChange={setConfirmPassword} /></div>
         <button onClick={changePassword} disabled={saving} className={adminBtnPrimary}>{saving ? "Updating..." : "Update Password"}</button>
       </div>
 

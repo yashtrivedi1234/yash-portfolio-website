@@ -13,6 +13,7 @@ import {
   adminListRowClass,
   adminToolbarClass,
 } from "@/components/admin/AdminUI";
+import { ValidatedInput, ValidatedTextarea } from "@/components/ValidatedField";
 import { notify } from "@/lib/toast";
 
 interface Testimonial {
@@ -56,10 +57,10 @@ export default function AdminTestimonialsPage() {
       {editing && (
         <div className={`${adminCardClass} mb-6 space-y-4`}>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div><label className={adminLabelClass}>Name</label><input className={adminInputClass} value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} /></div>
-            <div><label className={adminLabelClass}>Role</label><input className={adminInputClass} value={editing.role} onChange={(e) => setEditing({ ...editing, role: e.target.value })} /></div>
+            <div><label className={adminLabelClass}>Name</label><ValidatedInput fieldType="personName" className={adminInputClass} value={editing.name} onValueChange={(name) => setEditing({ ...editing, name })} /></div>
+            <div><label className={adminLabelClass}>Role</label><ValidatedInput fieldType="title" className={adminInputClass} value={editing.role} onValueChange={(role) => setEditing({ ...editing, role })} /></div>
           </div>
-          <div><label className={adminLabelClass}>Content</label><textarea className={adminInputClass} rows={3} value={editing.content} onChange={(e) => setEditing({ ...editing, content: e.target.value })} /></div>
+          <div><label className={adminLabelClass}>Content</label><ValidatedTextarea fieldType="longText" className={adminInputClass} rows={3} value={editing.content} onValueChange={(content) => setEditing({ ...editing, content })} /></div>
           <div className="flex flex-wrap gap-3">
             <button onClick={handleSave} className={adminBtnPrimary}>Save</button>
             <button onClick={() => setEditing(null)} className={adminBtnSecondary}>Cancel</button>

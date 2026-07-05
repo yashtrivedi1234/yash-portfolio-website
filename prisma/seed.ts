@@ -121,7 +121,7 @@ async function main() {
 
   await prisma.techStackItem.deleteMany();
   await prisma.techStackItem.createMany({
-    data: techStackStrip.map((name, i) => ({ name, sortOrder: i })),
+    data: techStackStrip.map((item, i) => ({ name: item.name, sortOrder: i })),
   });
 
   console.log("Database seeded successfully!");

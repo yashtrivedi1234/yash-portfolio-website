@@ -39,8 +39,8 @@ export default async function SkillsPage() {
           <SectionHeading label={heading.label} title={heading.title} description={heading.description} />
           <div className="mb-16 flex flex-wrap justify-center gap-3">
             {techStackStrip.map((tech) => (
-              <span key={tech} className="rounded-full border border-violet-500/30 bg-violet-500/10 px-5 py-2 text-sm font-medium text-violet-300">
-                {tech}
+              <span key={tech.name} className="rounded-full border border-violet-500/30 bg-violet-500/10 px-5 py-2 text-sm font-medium text-violet-300">
+                {tech.name}
               </span>
             ))}
           </div>

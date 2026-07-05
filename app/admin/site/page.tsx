@@ -13,6 +13,7 @@ import { AdminTabs, ListEditor } from "@/components/admin/AdminTabs";
 import { FileUploadField } from "@/components/admin/FileUploadField";
 import type { FullSiteConfig } from "@/lib/site-config";
 import { notify } from "@/lib/toast";
+import { deepMerge, sanitizeDeepConfig } from "@/lib/sanitize-api";
 
 type SiteData = FullSiteConfig;
 
@@ -42,7 +43,14 @@ export default function AdminSitePage() {
   }
 
   function update(partial: Partial<SiteData>) {
-    setData((prev) => (prev ? { ...prev, ...partial } : prev));
+    setData((prev) => {
+      if (!prev) return prev;
+      const merged = deepMerge(
+        prev as unknown as Record<string, unknown>,
+        partial as Record<string, unknown>
+      );
+      return sanitizeDeepConfig(merged) as unknown as SiteData;
+    });
   }
 
   if (loading || !data) return <AdminLoading />;

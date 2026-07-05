@@ -86,6 +86,12 @@ export function FooterClient({ config }: FooterClientProps) {
             &copy; {year} {config.name}. {config.footer.copyrightSuffix}
           </p>
           <p className="text-sm text-slate-500">{config.footer.builtWith}</p>
+          <Link
+            href="/admin/login"
+            className="text-sm text-slate-600 transition-colors hover:text-violet-400"
+          >
+            Admin Login
+          </Link>
         </div>
       </div>
     </footer>

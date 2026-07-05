@@ -15,6 +15,7 @@ import {
 } from "@/components/admin/AdminUI";
 import { FileUploadField } from "@/components/admin/FileUploadField";
 import { notify } from "@/lib/toast";
+import { slugify } from "@/lib/utils";
 
 interface Project {
   id: string;
@@ -61,6 +62,53 @@ export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<(typeof emptyProject) & { id?: string } | null>(null);
+  const [slugManual, setSlugManual] = useState(false);
+
+  function openNewProject() {
+    setSlugManual(false);
+    setEditing({ ...emptyProject });
+  }
+
+  function openEditProject(p: Project) {
+    setSlugManual(true);
+    setEditing({
+      id: p.id,
+      title: p.title,
+      slug: p.slug,
+      description: p.description,
+      longDescription: p.longDescription,
+      image: p.image,
+      techStack: p.techStack.join(", "),
+      category: p.category,
+      year: p.year,
+      status: p.status,
+      featured: p.featured,
+      liveUrl: p.liveUrl,
+      features: p.features.join("\n"),
+      problem: p.problem ?? "",
+      solution: p.solution ?? "",
+      result: p.result ?? "",
+      metrics: (p.metrics ?? []).map((m) => `${m.value}|${m.label}`).join("\n"),
+      gallery: (p.gallery ?? []).join("\n"),
+    });
+  }
+
+  function handleTitleChange(title: string) {
+    setEditing((prev) =>
+      prev
+        ? {
+            ...prev,
+            title,
+            slug: slugManual ? prev.slug : slugify(title),
+          }
+        : prev
+    );
+  }
+
+  function handleSlugChange(slug: string) {
+    setSlugManual(true);
+    setEditing((prev) => (prev ? { ...prev, slug } : prev));
+  }
 
   function loadProjects() {
     fetch("/api/admin/projects")
@@ -104,6 +152,7 @@ export default function AdminProjectsPage() {
     if (res.ok) {
       notify.success(editing.id ? "Project updated!" : "Project created!");
       setEditing(null);
+      setSlugManual(false);
       loadProjects();
     } else {
       notify.error("Failed to save project");
@@ -122,7 +171,7 @@ export default function AdminProjectsPage() {
     <>
       <div className={adminToolbarClass}>
         <AdminPageHeader title="Projects" description="Manage your portfolio projects." className="mb-0" />
-        <button onClick={() => setEditing({ ...emptyProject })} className={`${adminBtnPrimary} shrink-0 self-start`}>
+        <button onClick={openNewProject} className={`${adminBtnPrimary} shrink-0 self-start`}>
           + Add Project
         </button>
       </div>
@@ -133,11 +182,19 @@ export default function AdminProjectsPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className={adminLabelClass}>Title</label>
-              <input className={adminInputClass} value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value, slug: editing.slug || e.target.value.toLowerCase().replace(/\s+/g, "-") })} />
+              <input className={adminInputClass} value={editing.title} onChange={(e) => handleTitleChange(e.target.value)} />
             </div>
             <div>
               <label className={adminLabelClass}>Slug</label>
-              <input className={adminInputClass} value={editing.slug} onChange={(e) => setEditing({ ...editing, slug: e.target.value })} />
+              <input
+                className={adminInputClass}
+                value={editing.slug}
+                onChange={(e) => handleSlugChange(e.target.value)}
+                placeholder="Auto-generated from title"
+              />
+              {!slugManual && editing.title && (
+                <p className="mt-1 text-xs text-slate-500">Auto-generated from title</p>
+              )}
             </div>
           </div>
           <div>
@@ -217,7 +274,7 @@ export default function AdminProjectsPage() {
           </label>
           <div className="flex flex-wrap gap-3">
             <button onClick={handleSave} className={adminBtnPrimary}>Save</button>
-            <button onClick={() => setEditing(null)} className={adminBtnSecondary}>Cancel</button>
+            <button onClick={() => { setEditing(null); setSlugManual(false); }} className={adminBtnSecondary}>Cancel</button>
           </div>
         </div>
       )}
@@ -231,26 +288,7 @@ export default function AdminProjectsPage() {
             </div>
             <div className="flex shrink-0 flex-wrap gap-2">
               <button
-                onClick={() => setEditing({
-                  id: p.id,
-                  title: p.title,
-                  slug: p.slug,
-                  description: p.description,
-                  longDescription: p.longDescription,
-                  image: p.image,
-                  techStack: p.techStack.join(", "),
-                  category: p.category,
-                  year: p.year,
-                  status: p.status,
-                  featured: p.featured,
-                  liveUrl: p.liveUrl,
-                  features: p.features.join("\n"),
-                  problem: p.problem ?? "",
-                  solution: p.solution ?? "",
-                  result: p.result ?? "",
-                  metrics: (p.metrics ?? []).map((m) => `${m.value}|${m.label}`).join("\n"),
-                  gallery: (p.gallery ?? []).join("\n"),
-                })}
+                onClick={() => openEditProject(p)}
                 className={adminBtnSecondary}
               >
                 Edit

@@ -140,7 +140,16 @@ export function NavbarClient({ config }: NavbarClientProps) {
             ))}
           </ul>
 
-          <div className="hidden lg:block">
+          <div className="hidden items-center gap-2 lg:flex">
+            <Link
+              href={config.navbar.adminLoginHref}
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-sm font-medium text-slate-300 transition-all duration-300 hover:border-violet-500/40 hover:bg-slate-800 hover:text-violet-300"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              {config.navbar.adminLoginLabel}
+            </Link>
             <Link
               href={config.navbar.hireMeHref}
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-violet-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02] hover:from-violet-500 hover:to-indigo-500 hover:shadow-violet-500/30 active:translate-y-0"
@@ -194,7 +203,19 @@ export function NavbarClient({ config }: NavbarClientProps) {
               </Link>
             </li>
           ))}
-          <li className="pt-3">
+          <li className="pt-2">
+            <Link
+              href={config.navbar.adminLoginHref}
+              className="flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-3.5 text-center text-base font-medium text-slate-300 transition-colors hover:border-violet-500/40 hover:text-violet-300"
+              onClick={() => setIsOpen(false)}
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              {config.navbar.adminLoginLabel}
+            </Link>
+          </li>
+          <li className="pt-2">
             <Link
               href={config.navbar.hireMeHref}
               className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-3.5 text-center text-base font-medium text-white shadow-lg shadow-violet-500/20"

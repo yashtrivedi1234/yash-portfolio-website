@@ -115,6 +115,8 @@ export interface FullSiteConfig {
   navbar: {
     hireMeLabel: string;
     hireMeHref: string;
+    adminLoginLabel: string;
+    adminLoginHref: string;
   };
   pageHeadings: {
     projects: SectionContent;
@@ -435,6 +437,8 @@ export function getDefaultSiteConfig(): FullSiteConfig {
     navbar: {
       hireMeLabel: "Hire Me",
       hireMeHref: "/contact",
+      adminLoginLabel: "Admin",
+      adminLoginHref: "/admin/login",
     },
     pageHeadings: {
       projects: {

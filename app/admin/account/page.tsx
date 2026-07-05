@@ -53,6 +53,27 @@ export default function AdminAccountPage() {
         <button onClick={changePassword} disabled={saving} className={adminBtnPrimary}>{saving ? "Updating..." : "Update Password"}</button>
       </div>
 
+      <div className={`${adminCardClass} mb-6 space-y-4`}>
+        <h3 className="font-semibold text-white">Email (SMTP)</h3>
+        <p className="text-sm text-slate-400">
+          Test your SMTP settings. A test email is sent to your admin inbox (`SMTP_TO`).
+        </p>
+        <button
+          onClick={async () => {
+            setSaving(true);
+            const res = await fetch("/api/admin/email/test", { method: "POST" });
+            const data = await res.json();
+            setSaving(false);
+            if (res.ok) notify.success(data.message ?? "Test email sent!");
+            else notify.error(data.error ?? "Email test failed");
+          }}
+          disabled={saving}
+          className={adminBtnPrimary}
+        >
+          {saving ? "Testing..." : "Send Test Email"}
+        </button>
+      </div>
+
       <div className={`${adminCardClass} space-y-4`}>
         <h3 className="font-semibold text-white">Admin Profile Photo</h3>
         <p className="text-sm text-slate-400">This photo appears in the admin sidebar and login page.</p>

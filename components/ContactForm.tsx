@@ -28,8 +28,19 @@ export function ContactForm({ form }: ContactFormProps) {
         body: JSON.stringify({ name, email, subject, message }),
       });
 
-      if (!res.ok) throw new Error("Failed");
-      notify.success(form.successMessage);
+      const data = await res.json();
+
+      if (!res.ok) {
+        notify.error(data.error ?? form.errorMessage);
+        return;
+      }
+
+      if (data.warning) {
+        notify.warning(data.warning);
+      } else {
+        notify.success(form.successMessage);
+      }
+
       setName("");
       setEmail("");
       setSubject("");

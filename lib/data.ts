@@ -8,8 +8,10 @@ import { skillCategories as staticSkillCategories, techStackStrip as staticTechS
 import { experienceItems as staticExperience, type ExperienceItem } from "@/data/experience";
 import { testimonials as staticTestimonials, type Testimonial } from "@/data/testimonials";
 import { faqs as staticFaqs, type FAQ } from "@/data/faqs";
+import { blogPosts as staticBlogPosts, type BlogPost } from "@/data/blog";
 
 export type { SiteConfig } from "@/lib/site-config";
+export type { BlogPost } from "@/data/blog";
 
 const REVALIDATE_SECONDS = 60;
 
@@ -162,6 +164,28 @@ async function loadFaqs(): Promise<FAQ[]> {
   }
 }
 
+async function loadBlogPosts(publishedOnly = true): Promise<BlogPost[]> {
+  if (!(await isDbConnected())) return staticBlogPosts;
+
+  try {
+    const rows = await prisma.blogPost.findMany({
+      where: publishedOnly ? { published: true } : undefined,
+      orderBy: [{ publishedAt: "desc" }, { sortOrder: "asc" }],
+    });
+    if (rows.length === 0 && publishedOnly) return staticBlogPosts;
+    return rows.map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      content: post.content,
+      coverImage: post.coverImage,
+      publishedAt: (post.publishedAt ?? post.createdAt).toISOString(),
+    }));
+  } catch {
+    return staticBlogPosts;
+  }
+}
+
 export const SITE_CONFIG_CACHE_TAG = "site-config";
 
 const getSiteConfigCached = unstable_cache(loadSiteConfig, ["site-config"], {
@@ -175,6 +199,11 @@ const getTechStackStripCached = unstable_cache(loadTechStackStrip, ["tech-stack"
 const getExperienceItemsCached = unstable_cache(loadExperienceItems, ["experience"], { revalidate: REVALIDATE_SECONDS });
 const getTestimonialsCached = unstable_cache(loadTestimonials, ["testimonials"], { revalidate: REVALIDATE_SECONDS });
 const getFaqsCached = unstable_cache(loadFaqs, ["faqs"], { revalidate: REVALIDATE_SECONDS });
+const getBlogPostsCached = unstable_cache(
+  () => loadBlogPosts(true),
+  ["blog-posts"],
+  { revalidate: REVALIDATE_SECONDS }
+);
 
 export const getSiteConfig = cache(getSiteConfigCached);
 export const getProjects = cache(getProjectsCached);
@@ -184,6 +213,12 @@ export const getTechStackStrip = cache(getTechStackStripCached);
 export const getExperienceItems = cache(getExperienceItemsCached);
 export const getTestimonials = cache(getTestimonialsCached);
 export const getFaqs = cache(getFaqsCached);
+export const getBlogPosts = cache(getBlogPostsCached);
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
+  const posts = await getBlogPosts();
+  return posts.find((post) => post.slug === slug);
+}
 
 export async function getProjectBySlug(slug: string): Promise<Project | undefined> {
   const projects = await getProjects();

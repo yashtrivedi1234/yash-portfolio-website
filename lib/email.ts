@@ -115,6 +115,24 @@ function escapeHtml(text: string) {
     .replace(/"/g, "&quot;");
 }
 
+export async function sendTestEmail() {
+  const transporter = getTransporter();
+  if (!transporter) return { sent: false, reason: "SMTP not configured" };
+
+  const from = process.env.SMTP_FROM ?? process.env.SMTP_USER!;
+  const to = process.env.SMTP_TO ?? process.env.SMTP_USER!;
+
+  await transporter.sendMail({
+    from,
+    to,
+    subject: "[Portfolio] SMTP test email",
+    text: "Your portfolio SMTP settings are working correctly.",
+    html: `<p>Your portfolio <strong>SMTP settings are working correctly</strong>.</p>`,
+  });
+
+  return { sent: true, to };
+}
+
 export async function verifyEmailConnection() {
   const transporter = getTransporter();
   if (!transporter) return { ok: false, error: "SMTP not configured" };

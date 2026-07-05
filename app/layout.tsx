@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Syne } from "next/font/google";
 import { RootJsonLd } from "@/components/RootJsonLd";
+import { Analytics } from "@/components/Analytics";
 import { getSiteConfig } from "@/lib/data";
 import { getDefaultSiteConfig } from "@/lib/site-config";
 import { getFaviconType, resolveFaviconUrl } from "@/lib/favicon";
@@ -93,6 +94,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-slate-950 text-slate-100 antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );

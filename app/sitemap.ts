@@ -1,8 +1,12 @@
 import type { MetadataRoute } from "next";
-import { getProjects, getSiteConfig } from "@/lib/data";
+import { getProjects, getBlogPosts, getSiteConfig } from "@/lib/data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [config, projects] = await Promise.all([getSiteConfig(), getProjects()]);
+  const [config, projects, blogPosts] = await Promise.all([
+    getSiteConfig(),
+    getProjects(),
+    getBlogPosts(),
+  ]);
   const baseUrl = config.portfolioUrl;
 
   const staticPages = config.navLinks.map((l) => l.href).concat(["/privacy-policy", "/terms-and-conditions"]);
@@ -21,5 +25,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...projectEntries];
+  const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.publishedAt),
+    changeFrequency: "weekly",
+    priority: 0.75,
+  }));
+
+  return [...staticEntries, ...projectEntries, ...blogEntries];
 }

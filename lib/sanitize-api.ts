@@ -299,6 +299,18 @@ export function sanitizePasswordPayload(body: Record<string, unknown>) {
   };
 }
 
+export function sanitizeBlogPayload(body: Record<string, unknown>) {
+  return {
+    title: sanitizeInput("title", String(body.title ?? "")),
+    slug: sanitizeInput("slug", String(body.slug ?? "")),
+    excerpt: sanitizeInput("longText", String(body.excerpt ?? "")),
+    content: sanitizeInput("longText", String(body.content ?? "")),
+    coverImage: body.coverImage ? sanitizeInput("url", String(body.coverImage)) : null,
+    published: Boolean(body.published),
+    sortOrder: typeof body.sortOrder === "number" ? body.sortOrder : undefined,
+  };
+}
+
 export function sanitizeProfilePayload(body: Record<string, unknown>) {
   return {
     name: body.name ? sanitizeInput("personName", String(body.name)) : undefined,

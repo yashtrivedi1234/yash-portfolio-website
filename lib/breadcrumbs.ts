@@ -10,6 +10,7 @@ export function getBreadcrumbLabels(config: SiteConfig) {
     services: config.pageHeadings.services.label ?? "Services",
     skills: config.pageHeadings.skills.label ?? "Skills",
     experience: config.pageHeadings.experience.label ?? "Experience",
+    blog: config.pageHeadings.blog.label ?? "Blog",
     contact: config.contactPage.label ?? "Contact",
     privacy: config.legal.privacyPolicy.title,
     terms: config.legal.termsAndConditions.title,

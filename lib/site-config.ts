@@ -124,6 +124,7 @@ export interface FullSiteConfig {
     skills: SectionContent;
     experience: SectionContent;
     about: SectionContent;
+    blog: SectionContent;
   };
   experienceSections: { key: string; label: string }[];
   buttons: {
@@ -465,6 +466,11 @@ export function getDefaultSiteConfig(): FullSiteConfig {
         label: "About",
         title: "About Me",
         description: "",
+      },
+      blog: {
+        label: "Blog",
+        title: "Blog & Articles",
+        description: "Thoughts on web development, projects, and lessons learned while building modern applications.",
       },
     },
     experienceSections: [

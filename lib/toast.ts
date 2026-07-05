@@ -15,4 +15,7 @@ export const notify = {
   info(message: string, options?: ToastOptions) {
     toast.info(message, { ...defaults, ...options });
   },
+  warning(message: string, options?: ToastOptions) {
+    toast.warn(message, { ...defaults, autoClose: 6000, ...options });
+  },
 };

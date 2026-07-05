@@ -10,7 +10,6 @@ export interface Project {
   status: "Completed" | "In Progress" | "Featured";
   featured: boolean;
   liveUrl: string;
-  githubUrl?: string;
   features: string[];
 }
 
@@ -28,8 +27,7 @@ export const projects: Project[] = [
     year: "2026",
     status: "In Progress",
     featured: true,
-    liveUrl: "https://github.com/yashtrivedi",
-    githubUrl: "https://github.com/yashtrivedi",
+    liveUrl: "#",
     features: [
       "MongoDB schema design & Express REST APIs",
       "JWT/RBAC admin authentication",
@@ -51,8 +49,7 @@ export const projects: Project[] = [
     year: "2025",
     status: "Featured",
     featured: true,
-    liveUrl: "https://github.com/yashtrivedi",
-    githubUrl: "https://github.com/yashtrivedi",
+    liveUrl: "#",
     features: [
       "WebRTC peer connections & signaling",
       "Video calls & screen sharing",
@@ -74,7 +71,7 @@ export const projects: Project[] = [
     year: "2025",
     status: "Completed",
     featured: true,
-    liveUrl: "https://github.com/yashtrivedi",
+    liveUrl: "#",
     features: [
       "Groq LLM + LangChain pipeline",
       "Context-aware retrieval responses",
@@ -95,7 +92,7 @@ export const projects: Project[] = [
     year: "2025",
     status: "Completed",
     featured: false,
-    liveUrl: "https://github.com/yashtrivedi",
+    liveUrl: "#",
     features: [
       "End-to-end DB modelling & APIs",
       "Responsive React UI",
@@ -116,7 +113,7 @@ export const projects: Project[] = [
     year: "2025",
     status: "Completed",
     featured: false,
-    liveUrl: "https://github.com/yashtrivedi",
+    liveUrl: "#",
     features: [
       "1,000+ posts/day from 150+ sites",
       "92% accuracy via Groq LLM",
@@ -137,7 +134,7 @@ export const projects: Project[] = [
     year: "2025",
     status: "Completed",
     featured: false,
-    liveUrl: "https://github.com/yashtrivedi",
+    liveUrl: "#",
     features: [
       "Custom CRM schema & APIs",
       "JWT/RBAC admin routes",

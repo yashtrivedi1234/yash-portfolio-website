@@ -1,4 +1,4 @@
-import type { Skill, SkillCategory } from "@/data/skills";
+import type { SkillCategory } from "@/data/skills";
 
 interface SkillCardProps {
   category: SkillCategory;
@@ -6,23 +6,19 @@ interface SkillCardProps {
 
 export function SkillCard({ category }: SkillCardProps) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-sm transition-all hover:border-violet-500/30">
-      <h3 className="mb-2 text-xl font-semibold text-white">{category.category}</h3>
-      <p className="mb-6 text-sm text-slate-400">{category.description}</p>
-      <div className="space-y-4">
-        {category.skills.map((skill: Skill) => (
-          <div key={skill.name}>
-            <div className="mb-1.5 flex justify-between text-sm">
-              <span className="font-medium text-slate-300">{skill.name}</span>
-              <span className="text-slate-500">{skill.level}%</span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-slate-800">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 transition-all duration-1000"
-                style={{ width: `${skill.level}%` }}
-              />
-            </div>
-          </div>
+    <div className="glass-card group rounded-2xl p-6 transition-all duration-300 hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5 sm:p-7">
+      <h3 className="mb-2 text-xl font-semibold text-white transition-colors group-hover:text-violet-300">
+        {category.category}
+      </h3>
+      <p className="mb-6 text-sm leading-relaxed text-slate-400">{category.description}</p>
+      <div className="flex flex-wrap gap-2">
+        {category.skills.map((skill) => (
+          <span
+            key={skill.name}
+            className="rounded-full border border-slate-700/80 bg-slate-800/50 px-3.5 py-1.5 text-sm font-medium text-slate-300 transition-colors group-hover:border-violet-500/20 group-hover:text-slate-200"
+          >
+            {skill.name}
+          </span>
         ))}
       </div>
     </div>

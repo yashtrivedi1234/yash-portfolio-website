@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  avatarUrl    String   @default("/images/profile.png")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SiteSettings {
+  id   String @id @default("default")
+  data Json
+}
+
+model Project {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  description     String
+  longDescription String   @db.Text
+  image           String
+  techStack       String[]
+  category        String
+  year            String
+  status          String
+  featured        Boolean  @default(false)
+  liveUrl         String
+  githubUrl       String?
+  features        String[]
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  icon        String
+  benefits    String[]
+  sortOrder   Int      @default(0)
+}
+
+model SkillCategory {
+  id          String  @id @default(cuid())
+  category    String
+  description String  @db.Text
+  sortOrder   Int     @default(0)
+  skills      Skill[]
+}
+
+model Skill {
+  id         String        @id @default(cuid())
+  name       String
+  level      Int
+  categoryId String
+  category   SkillCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  sortOrder  Int           @default(0)
+}
+
+model Experience {
+  id           String   @id @default(cuid())
+  title        String
+  organization String
+  location     String?
+  period       String
+  description  String   @db.Text
+  type         String
+  technologies String[]
+  sortOrder    Int      @default(0)
+}
+
+model Testimonial {
+  id        String @id @default(cuid())
+  name      String
+  role      String
+  company   String
+  content   String @db.Text
+  avatar    String
+  rating    Int    @default(5)
+  sortOrder Int    @default(0)
+}
+
+model Faq {
+  id        String @id @default(cuid())
+  question  String
+  answer    String @db.Text
+  sortOrder Int    @default(0)
+}
+
+model TechStackItem {
+  id        String @id @default(cuid())
+  name      String
+  sortOrder Int    @default(0)
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

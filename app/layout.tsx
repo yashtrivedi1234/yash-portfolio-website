@@ -1,11 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { JsonLd } from "@/components/JsonLd";
-import { siteConfig } from "@/data/site";
-import { createPersonSchema, createWebsiteSchema } from "@/lib/seo";
+import { RootJsonLd } from "@/components/RootJsonLd";
+import { ToastProvider } from "@/components/ToastProvider";
+import { getSiteConfig } from "@/lib/data";
+import { getDefaultSiteConfig } from "@/lib/site-config";
 import "./globals.css";
+
+function getFaviconType(url: string): string {
+  if (url.endsWith(".svg")) return "image/svg+xml";
+  if (url.endsWith(".png")) return "image/png";
+  if (url.endsWith(".webp")) return "image/webp";
+  if (url.endsWith(".ico")) return "image/x-icon";
+  return "image/png";
+}
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,78 +26,67 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-export const viewport: Viewport = {
-  themeColor: siteConfig.seo.themeColor,
-  width: "device-width",
-  initialScale: 1,
-};
+export async function generateViewport(): Promise<Viewport> {
+  try {
+    const config = await getSiteConfig();
+    return { themeColor: config.seo.themeColor, width: "device-width", initialScale: 1 };
+  } catch {
+    return { themeColor: getDefaultSiteConfig().seo.themeColor, width: "device-width", initialScale: 1 };
+  }
+}
 
-export const metadata: Metadata = {
-  title: {
-    default: siteConfig.seo.title,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.seo.description,
-  keywords: [...siteConfig.seo.keywords],
-  authors: [{ name: siteConfig.seo.author }],
-  creator: siteConfig.seo.author,
-  publisher: siteConfig.seo.publisher,
-  metadataBase: new URL(siteConfig.portfolioUrl),
-  alternates: {
-    canonical: siteConfig.portfolioUrl,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
-  openGraph: {
-    title: siteConfig.seo.title,
-    description: siteConfig.seo.description,
-    url: siteConfig.portfolioUrl,
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: siteConfig.seo.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.seo.title,
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.seo.title,
-    description: siteConfig.seo.description,
-    images: [siteConfig.seo.ogImage],
-  },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/logo.svg",
-  },
-  manifest: "/manifest.json",
-  other: {
-    "application-name": siteConfig.name,
-    "apple-mobile-web-app-title": siteConfig.name,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSiteConfig();
+  const faviconType = getFaviconType(config.seo.favicon);
+
+  return {
+    title: { default: config.seo.title, template: `%s | ${config.name}` },
+    description: config.seo.description,
+    keywords: [...config.seo.keywords],
+    authors: [{ name: config.seo.author }],
+    creator: config.seo.author,
+    publisher: config.seo.publisher,
+    metadataBase: new URL(config.portfolioUrl),
+    alternates: { canonical: config.portfolioUrl },
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+    openGraph: {
+      title: config.seo.title,
+      description: config.seo.description,
+      url: config.portfolioUrl,
+      siteName: config.name,
+      images: [{ url: config.seo.ogImage, width: 1200, height: 630, alt: config.seo.title }],
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: config.seo.title,
+      description: config.seo.description,
+      images: [config.seo.ogImage],
+    },
+    icons: {
+      icon: [{ url: config.seo.favicon, type: faviconType }],
+      apple: config.manifest.iconUrl,
+      shortcut: config.seo.favicon,
+    },
+    other: {
+      "application-name": config.name,
+      "apple-mobile-web-app-title": config.name,
+    },
+  };
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}>
       <head>
-        <JsonLd data={[createPersonSchema(), createWebsiteSchema()]} />
+        <RootJsonLd />
       </head>
       <body className="min-h-screen bg-slate-950 text-slate-100 antialiased">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {children}
+        <ToastProvider />
       </body>
     </html>
   );

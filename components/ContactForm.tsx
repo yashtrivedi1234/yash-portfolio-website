@@ -2,92 +2,101 @@
 
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/Button";
+import type { SiteConfig } from "@/lib/site-config";
+import { notify } from "@/lib/toast";
 
-export function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+interface ContactFormProps {
+  form: SiteConfig["contactPage"]["form"];
+}
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+export function ContactForm({ form }: ContactFormProps) {
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setStatus("success");
-    (e.target as HTMLFormElement).reset();
-    setTimeout(() => setStatus("idle"), 5000);
+    setLoading(true);
+
+    const formEl = e.target as HTMLFormElement;
+    const formData = new FormData(formEl);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          subject: formData.get("subject"),
+          message: formData.get("message"),
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed");
+      notify.success(form.successMessage);
+      formEl.reset();
+    } catch {
+      notify.error(form.errorMessage);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="glass-card space-y-6 rounded-2xl p-6 sm:p-8">
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="mb-2 block text-sm font-medium text-slate-300">
-            Name
+            {form.nameLabel}
           </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
-            placeholder="Your name"
-          />
+          <input type="text" id="name" name="name" required className="input-field" placeholder={form.namePlaceholder} />
         </div>
         <div>
           <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-300">
-            Email
+            {form.emailLabel}
           </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
-            placeholder="your@email.com"
-          />
+          <input type="email" id="email" name="email" required className="input-field" placeholder={form.emailPlaceholder} />
         </div>
       </div>
 
       <div>
         <label htmlFor="subject" className="mb-2 block text-sm font-medium text-slate-300">
-          Subject
+          {form.subjectLabel}
         </label>
-        <input
-          type="text"
-          id="subject"
-          name="subject"
-          required
-          className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
-          placeholder="Project inquiry"
-        />
+        <input type="text" id="subject" name="subject" required className="input-field" placeholder={form.subjectPlaceholder} />
       </div>
 
       <div>
         <label htmlFor="message" className="mb-2 block text-sm font-medium text-slate-300">
-          Message
+          {form.messageLabel}
         </label>
         <textarea
           id="message"
           name="message"
           required
           rows={5}
-          className="w-full resize-none rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
-          placeholder="Tell me about your project..."
+          className="input-field resize-none"
+          placeholder={form.messagePlaceholder}
         />
       </div>
 
-      {status === "success" && (
-        <div className="rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-green-400">
-          Thank you! Your message has been received. I&apos;ll get back to you soon.
-        </div>
-      )}
-
-      <Button type="submit" size="lg" className="w-full sm:w-auto">
-        Send Message
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-        </svg>
+      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={loading}>
+        {loading ? (
+          <>
+            <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            {form.sendingLabel}
+          </>
+        ) : (
+          <>
+            {form.submitLabel}
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </>
+        )}
       </Button>
-
-      <p className="text-sm text-slate-500">
-        This form is frontend-only. Connect to Formspree, Resend, or EmailJS for production use.
-      </p>
     </form>
   );
 }

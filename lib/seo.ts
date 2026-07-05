@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/data/site";
+import { getDefaultSiteConfig, type SiteConfig } from "@/lib/site-config";
 
-const baseUrl = siteConfig.portfolioUrl;
+const staticDefaults = getDefaultSiteConfig();
 
-export function getBaseUrl(): string {
-  return baseUrl;
+export function getBaseUrl(config?: SiteConfig): string {
+  return config?.portfolioUrl ?? staticDefaults.portfolioUrl;
+}
+
+function resolveAssetUrl(baseUrl: string, assetPath: string): string {
+  if (assetPath.startsWith("http://") || assetPath.startsWith("https://")) {
+    return assetPath;
+  }
+  return `${baseUrl}${assetPath.startsWith("/") ? assetPath : `/${assetPath}`}`;
 }
 
 interface PageSEOOptions {
@@ -15,6 +22,7 @@ interface PageSEOOptions {
   ogImage?: string;
   ogType?: "website" | "article";
   noIndex?: boolean;
+  config?: SiteConfig;
 }
 
 export function createPageMetadata({
@@ -25,18 +33,21 @@ export function createPageMetadata({
   ogImage,
   ogType = "website",
   noIndex = false,
+  config,
 }: PageSEOOptions): Metadata {
+  const c = config ?? staticDefaults;
+  const baseUrl = getBaseUrl(c);
   const url = `${baseUrl}${path}`;
-  const image = ogImage ?? siteConfig.seo.ogImage;
-  const allKeywords = keywords ?? siteConfig.seo.keywords;
+  const image = ogImage ?? c.seo.ogImage;
+  const allKeywords = keywords ?? c.seo.keywords;
 
   return {
     title,
     description,
     keywords: [...allKeywords],
-    authors: [{ name: siteConfig.seo.author }],
-    creator: siteConfig.seo.author,
-    publisher: siteConfig.seo.publisher,
+    authors: [{ name: c.seo.author }],
+    creator: c.seo.author,
+    publisher: c.seo.publisher,
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: url,
@@ -48,7 +59,7 @@ export function createPageMetadata({
       title,
       description,
       url,
-      siteName: siteConfig.name,
+      siteName: c.name,
       images: [{ url: image, width: 1200, height: 630, alt: title }],
       locale: "en_US",
       type: ogType,
@@ -60,55 +71,46 @@ export function createPageMetadata({
       images: [image],
     },
     other: {
-      "application-name": siteConfig.name,
-      "apple-mobile-web-app-title": siteConfig.name,
+      "application-name": c.name,
+      "apple-mobile-web-app-title": c.name,
     },
   };
 }
 
-export function createPersonSchema() {
+export function createPersonSchema(config?: SiteConfig) {
+  const c = config ?? staticDefaults;
+  const url = getBaseUrl(c);
   return {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: siteConfig.name,
-    jobTitle: siteConfig.role,
-    url: baseUrl,
-    image: `${baseUrl}/profile.svg`,
-    email: siteConfig.email,
-    sameAs: [
-      siteConfig.github,
-      siteConfig.linkedin,
-      siteConfig.leetcode,
-    ],
-    knowsAbout: [
-      "Full Stack Development",
-      "MERN Stack",
-      "Next.js",
-      "React",
-      "TypeScript",
-      "AI Integration",
-      "System Design",
-    ],
+    name: c.name,
+    jobTitle: c.role,
+    url,
+    image: resolveAssetUrl(url, c.hero?.profileImage ?? "/images/profile.png"),
+    email: c.email,
+    sameAs: [c.github, c.linkedin, c.leetcode].filter(Boolean),
+    knowsAbout: c.seo.keywords.slice(0, 8),
   };
 }
 
-export function createWebsiteSchema() {
+export function createWebsiteSchema(config?: SiteConfig) {
+  const c = config ?? staticDefaults;
+  const url = getBaseUrl(c);
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: `${siteConfig.name} Portfolio`,
-    url: baseUrl,
-    description: siteConfig.seo.description,
-    author: {
-      "@type": "Person",
-      name: siteConfig.name,
-    },
+    name: `${c.name} Portfolio`,
+    url,
+    description: c.seo.description,
+    author: { "@type": "Person", name: c.name },
   };
 }
 
 export function createBreadcrumbSchema(
-  items: { name: string; url: string }[]
+  items: { name: string; url: string }[],
+  config?: SiteConfig
 ) {
+  const baseUrl = getBaseUrl(config);
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -136,26 +138,31 @@ export function createFAQSchema(faqs: { question: string; answer: string }[]) {
   };
 }
 
-export function createProjectSchema(project: {
-  title: string;
-  description: string;
-  slug: string;
-  image: string;
-  year: string;
-  techStack: string[];
-  liveUrl: string;
-}) {
+export function createProjectSchema(
+  project: {
+    title: string;
+    description: string;
+    slug: string;
+    image: string;
+    year: string;
+    techStack: string[];
+    liveUrl: string;
+  },
+  config?: SiteConfig
+) {
+  const c = config ?? staticDefaults;
+  const baseUrl = getBaseUrl(c);
   return {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     name: project.title,
     description: project.description,
     url: `${baseUrl}/projects/${project.slug}`,
-    image: `${baseUrl}${project.image}`,
+    image: resolveAssetUrl(baseUrl, project.image),
     dateCreated: project.year,
     creator: {
       "@type": "Person",
-      name: siteConfig.name,
+      name: c.name,
     },
     keywords: project.techStack.join(", "),
     isAccessibleForFree: true,

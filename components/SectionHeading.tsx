@@ -18,23 +18,30 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        "mb-12",
+        "mb-12 md:mb-16",
         align === "center" && "text-center",
         className
       )}
     >
       {label && (
-        <span className="mb-3 inline-block rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1 text-sm font-medium text-violet-400">
+        <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm font-medium text-violet-400">
+          <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
           {label}
         </span>
       )}
-      <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+      <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
         {title}
       </h2>
+      <div
+        className={cn(
+          "mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500",
+          align === "center" ? "mx-auto" : ""
+        )}
+      />
       {description && (
         <p
           className={cn(
-            "mt-4 max-w-2xl text-lg text-slate-400",
+            "mt-5 max-w-2xl text-lg leading-relaxed text-slate-400",
             align === "center" && "mx-auto"
           )}
         >
